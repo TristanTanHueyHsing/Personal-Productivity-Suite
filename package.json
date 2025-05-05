@@ -1,0 +1,19 @@
+{
+  "name": "personal-productivity-suite",
+  "version": "1.0.0",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "electron": "electron .",
+    "frontend": "cd frontend&& npm start",
+    "start": "concurrently \"npm run frontend\" \"npm run electron\""
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "concurrently": "^9.1.2",
+    "electron": "^36.1.0"
+  }
+}
