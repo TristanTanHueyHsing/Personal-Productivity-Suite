@@ -29,7 +29,8 @@ import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Login from './Login';
 import Homepage from './Homepage'
-
+import Notes from './Notes';
+import Todo from './Todo';
 
 function App() {
   return (
@@ -37,6 +38,8 @@ function App() {
       <Routes>
         <Route path="/" element={<Login />} />
         <Route path="/homepage" element={<Homepage />} />
+        <Route path="/notes" element={<Notes />} />
+        <Route path="/todo" element={<Todo />} />
         {/* Add more routes here as needed */}
       </Routes>
     </Router>

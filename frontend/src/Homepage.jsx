@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
+import {Link} from 'react-router-dom';
 import './Homepage.css';
 import { FiSettings } from 'react-icons/fi';
 import { FaUserCircle } from "react-icons/fa";
@@ -9,7 +10,7 @@ const Homepage = () => {
     const [mood, setMood] = useState("");
     const [showSettingsPopup, setShowSettingsPopup] = useState(false);
     const focusInputRef = useRef(null);
-    const [activeTab, setActiveTab] = useState("Notes");
+    const [activeTab, setActiveTab] = useState("Homepage");
     const [animateSnapshots, setAnimateSnapshots] = useState(false);
 
     useEffect(() => {
@@ -42,16 +43,17 @@ const Homepage = () => {
                 <img src={focusflowLogo} alt="FocusFlow" width={150} height={150} style={{ display: 'block', margin: '-30px 0 0 0' }} />
                 <nav>
                     <ul className="nav-links">
-                        <li className={activeTab === "Notes" ? "active" : ""} onClick={() => setActiveTab("Notes")}>Notes</li>
-                        <li className={activeTab === "To-Do" ? "active" : ""} onClick={() => setActiveTab("To-Do")}>To-Do</li>
-                        <li className={activeTab === "Journal" ? "active" : ""} onClick={() => setActiveTab("Journal")}>Journal</li>
-                        <li className={activeTab === "Pomodoro" ? "active" : ""} onClick={() => setActiveTab("Pomodoro")}>Pomodoro</li>
-                        <li className={activeTab === "Dashboard" ? "active" : ""} onClick={() => setActiveTab("Dashboard")}>Dashboard</li>
+                        <li className={activeTab === "Homepage" ? "active" : ""} onClick={() => setActiveTab("Homepage")}><Link to="/homepage" onClick={() => setActiveTab("Homepage")}>Home</Link></li>
+                        <li className={activeTab === "Notes" ? "active" : ""} onClick={() => setActiveTab("Notes")}><Link to="/notes" onClick={() => setActiveTab("Notes")}>Notes</Link></li>
+                        <li className={activeTab === "To-Do" ? "active" : ""} onClick={() => setActiveTab("To-Do")}><Link to="/todo" onClick={() => setActiveTab("To-Do")}>To-Do</Link></li>
+                        <li className={activeTab === "Journal" ? "active" : ""} onClick={() => setActiveTab("Journal")}><Link to="/journal" onClick={() => setActiveTab("Journal")}>Journal</Link></li>
+                        <li className={activeTab === "Pomodoro" ? "active" : ""} onClick={() => setActiveTab("Pomodoro")}><Link to="/pomodoro" onClick={() => setActiveTab("Pomodoro")}>Pomodoro</Link></li>
+                        <li className={activeTab === "Dashboard" ? "active" : ""} onClick={() => setActiveTab("Dashboard")}><Link to="/dashboard" onClick={() => setActiveTab("Dashboard")}>Dashboard</Link></li>
                     </ul>
                     <div className="spacer"></div>
                     <hr className="separator" />
                     <ul className="nav-links">
-                        <li className={activeTab === "Trash" ? "active" : ""} onClick={() => setActiveTab("Trash")}>Trash</li>
+                        <li className={activeTab === "Trash" ? "active" : ""} onClick={() => setActiveTab("Trash")}><Link to="/trash" onClick={() => setActiveTab("Trash")}>Trash</Link></li>
                     </ul>
                 </nav>
                 <div className="sidebar-bottom">
