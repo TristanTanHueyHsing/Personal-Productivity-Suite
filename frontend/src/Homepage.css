@@ -106,9 +106,10 @@ ol {
 .main-content {
     flex: 1;
     background-color: #0F172A;
-    padding: 30px;
+    padding: 30px 30px 30px 30px;
     box-sizing: border-box;
     overflow-y: auto;
+    position: relative;
 }
 
 .main-content h1 {
@@ -424,3 +425,28 @@ ol {
         margin-left: 16px;
     }
 }
+
+.sidebar-header {
+    display: flex;
+    justify-content: flex-end;;
+    position: relative;
+}
+
+.toggle-icon {
+    cursor: pointer;
+    color: #333;
+    position: absolute;
+}
+
+.toggle-icon-closed {
+    position: fixed; /* ensures it doesn't shift with layout */
+    top: 20px;        /* distance from the top */
+    left: 20px;       /* position it clearly on the screen */
+    z-index: 999;    /* ensures it's above other elements */
+    background-color: #1F2127;
+    padding: 8px;
+    border-radius: 10px;
+    cursor: pointer;
+    color: #14B8A6;
+}
+

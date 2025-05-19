@@ -1,9 +1,10 @@
 import React, { useEffect, useState, useRef } from "react";
-import {Link} from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import './Homepage.css';
 import { FiSettings } from 'react-icons/fi';
 import { FaUserCircle } from "react-icons/fa";
 import focusflowLogo from './images/focusflow.png';
+import { BsLayoutSidebar } from 'react-icons/bs';
 
 const Homepage = () => {
     const [focus, setFocus] = useState("");
@@ -12,6 +13,7 @@ const Homepage = () => {
     const focusInputRef = useRef(null);
     const [activeTab, setActiveTab] = useState("Homepage");
     const [animateSnapshots, setAnimateSnapshots] = useState(false);
+    const [isSidebarVisible, setIsSidebarVisible] = useState(true);
 
     useEffect(() => {
         const timeout = setTimeout(() => {
@@ -39,43 +41,61 @@ const Homepage = () => {
     return (
         <div className="app-container">
             {/* Sidebar */}
-            <aside className="sidebar">
-                <img src={focusflowLogo} alt="FocusFlow" width={150} height={150} style={{ display: 'block', margin: '-30px 0 0 0' }} />
-                <nav>
-                    <ul className="nav-links">
-                        <li className={activeTab === "Homepage" ? "active" : ""} onClick={() => setActiveTab("Homepage")}><Link to="/homepage" onClick={() => setActiveTab("Homepage")}>Home</Link></li>
-                        <li className={activeTab === "Notes" ? "active" : ""} onClick={() => setActiveTab("Notes")}><Link to="/notes" onClick={() => setActiveTab("Notes")}>Notes</Link></li>
-                        <li className={activeTab === "To-Do" ? "active" : ""} onClick={() => setActiveTab("To-Do")}><Link to="/todo" onClick={() => setActiveTab("To-Do")}>To-Do</Link></li>
-                        <li className={activeTab === "Journal" ? "active" : ""} onClick={() => setActiveTab("Journal")}><Link to="/journal" onClick={() => setActiveTab("Journal")}>Journal</Link></li>
-                        <li className={activeTab === "Pomodoro" ? "active" : ""} onClick={() => setActiveTab("Pomodoro")}><Link to="/pomodoro" onClick={() => setActiveTab("Pomodoro")}>Pomodoro</Link></li>
-                        <li className={activeTab === "Dashboard" ? "active" : ""} onClick={() => setActiveTab("Dashboard")}><Link to="/dashboard" onClick={() => setActiveTab("Dashboard")}>Dashboard</Link></li>
-                    </ul>
-                    <div className="spacer"></div>
-                    <hr className="separator" />
-                    <ul className="nav-links">
-                        <li className={activeTab === "Trash" ? "active" : ""} onClick={() => setActiveTab("Trash")}><Link to="/trash" onClick={() => setActiveTab("Trash")}>Trash</Link></li>
-                    </ul>
-                </nav>
-                <div className="sidebar-bottom">
-                    <div className="user-info">
-                        <FaUserCircle className="user-icon" />
-                        <p className="username"><b>John Doe</b></p>
-                        <div className="settings-container" style={{ position: 'relative' }}>
-                            <FiSettings className="settings-icon" onClick={() => setShowSettingsPopup(prev => !prev)} />
-                            {showSettingsPopup && (
-                                <div className="settings-popup">
-                                    <ul>
-                                        <li>Profile</li>
-                                        <li>Account Settings</li>
-                                        <li>Logout</li>
-                                    </ul>
-                                </div>
-                            )}
+            {isSidebarVisible && (
+                <aside className="sidebar">
+                    <div className="sidebar-header">
+                        <BsLayoutSidebar
+                            size={24}
+                            className="toggle-icon"
+                            onClick={() => setIsSidebarVisible(false)}
+                            color="#14B8A6"
+                        />
+                    </div>
+                    <img src={focusflowLogo} alt="FocusFlow" width={150} height={150} style={{ display: 'block', margin: '-150px 0 -120px 0' }} />
+                    <nav>
+                        <ul className="nav-links">
+                            <li className={activeTab === "Homepage" ? "active" : ""} onClick={() => setActiveTab("Homepage")}><Link to="/homepage" onClick={() => setActiveTab("Homepage")}>Home</Link></li>
+                            <li className={activeTab === "Notes" ? "active" : ""} onClick={() => setActiveTab("Notes")}><Link to="/notes" onClick={() => setActiveTab("Notes")}>Notes</Link></li>
+                            <li className={activeTab === "To-Do" ? "active" : ""} onClick={() => setActiveTab("To-Do")}><Link to="/todo" onClick={() => setActiveTab("To-Do")}>To-Do</Link></li>
+                            <li className={activeTab === "Journal" ? "active" : ""} onClick={() => setActiveTab("Journal")}><Link to="/journal" onClick={() => setActiveTab("Journal")}>Journal</Link></li>
+                            <li className={activeTab === "Pomodoro" ? "active" : ""} onClick={() => setActiveTab("Pomodoro")}><Link to="/pomodoro" onClick={() => setActiveTab("Pomodoro")}>Pomodoro</Link></li>
+                            <li className={activeTab === "Dashboard" ? "active" : ""} onClick={() => setActiveTab("Dashboard")}><Link to="/dashboard" onClick={() => setActiveTab("Dashboard")}>Dashboard</Link></li>
+                        </ul>
+                        <div className="spacer"></div>
+                        <hr className="separator" />
+                        <ul className="nav-links">
+                            <li className={activeTab === "Trash" ? "active" : ""} onClick={() => setActiveTab("Trash")}><Link to="/trash" onClick={() => setActiveTab("Trash")}>Trash</Link></li>
+                        </ul>
+                    </nav>
+                    <div className="sidebar-bottom">
+                        <div className="user-info">
+                            <FaUserCircle className="user-icon" />
+                            <p className="username"><b>John Doe</b></p>
+                            <div className="settings-container" style={{ position: 'relative' }}>
+                                <FiSettings className="settings-icon" onClick={() => setShowSettingsPopup(prev => !prev)} />
+                                {showSettingsPopup && (
+                                    <div className="settings-popup">
+                                        <ul>
+                                            <li>Profile</li>
+                                            <li>Account Settings</li>
+                                            <li>Logout</li>
+                                        </ul>
+                                    </div>
+                                )}
+                            </div>
                         </div>
                     </div>
-                </div>
-            </aside>
-
+                </aside>
+            )}
+            {!isSidebarVisible && (
+                <BsLayoutSidebar
+                    size={28}
+                    className="toggle-icon-closed"
+                    onClick={() => setIsSidebarVisible(true)}
+                    aria-label="Open sidebar"
+                    role="button"
+                />
+            )}
             {/* Main Content */}
             <main className="main-content">
                 {/* Greeting Section */}
