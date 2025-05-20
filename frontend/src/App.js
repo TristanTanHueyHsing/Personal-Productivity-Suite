@@ -27,10 +27,10 @@
 import './App.css';
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import Login from './Login';
-import Homepage from './Homepage'
-import Notes from './Notes';
-import Todo from './Todo';
+import Login from './login/Login';
+import Homepage from './homepage/Homepage'
+import Notes from './notes/Notes';
+import Todo from './todo/Todo';
 
 function App() {
   return (

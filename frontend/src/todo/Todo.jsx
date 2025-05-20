@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import './Todo.css';
 import { FiSettings } from 'react-icons/fi';
 import { FaUserCircle } from "react-icons/fa";
-import focusflowLogo from './images/focusflow.png';
 
 const Todo = () => {
     const [showSettingsPopup, setShowSettingsPopup] = useState(false);
@@ -33,7 +32,6 @@ const Todo = () => {
         <div className="app-container">
             {/* Sidebar */}
             <aside className="sidebar">
-                <img src={focusflowLogo} alt="FocusFlow" width={150} height={150} style={{ display: 'block', margin: '-30px 0 0 0' }} />
                 <nav>
                     <ul className="nav-links">
                         <li className={activeTab === "Homepage" ? "active" : ""} onClick={() => setActiveTab("Homepage")}><Link to="/homepage" onClick={() => setActiveTab("Homepage")}>Home</Link></li>

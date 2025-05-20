@@ -1,0 +1,57 @@
+/* inter-latin-wght-normal */
+@font-face {
+    font-family: 'Inter Variable';
+    font-style: normal;
+    font-display: auto;
+    font-weight: 100 900;
+    src: url(https://cdn.jsdelivr.net/fontsource/fonts/inter:vf@latest/latin-opsz-normal.woff2) format('woff2-variations');
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+* {
+    font-family: 'Inter Variable', sans-serif;
+}
+
+/* Global reset */
+body,
+html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    background-color: #0F172A;
+    color: #E5E7EB;
+}
+
+.app-container-notes{
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+  margin-left: 14.5%;
+}
+
+/* Main content (right of sidebar) */
+.main-content-notes{
+  flex: 1;
+  display: flex;
+  padding: 0 20px;
+  position: relative;
+}
+
+/* 30% left area of main content */
+.left-pane {
+  width: 25%;
+  padding-right: 10px;
+}
+
+/* Vertical divider https://www.mbe.com.my/contact_us https://react-icons.github.io/react-icons/search/#q=sidebar*/
+.divider-line {
+  width: 2px;
+  background-color: #ccc;
+  height: 100%;
+}
+
+/* 70% right area of main content */
+.right-pane {
+  flex: 1;
+  padding-left: 10px;
+}
