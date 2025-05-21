@@ -33,14 +33,13 @@ html {
 .main-content-notes{
   flex: 1;
   display: flex;
-  padding: 0 20px;
+  padding: 0;
   position: relative;
 }
 
 /* 30% left area of main content */
 .left-pane {
   width: 25%;
-  padding-right: 10px;
 }
 
 /* Vertical divider https://www.mbe.com.my/contact_us https://react-icons.github.io/react-icons/search/#q=sidebar*/
@@ -53,5 +52,206 @@ html {
 /* 70% right area of main content */
 .right-pane {
   flex: 1;
-  padding-left: 10px;
+}
+
+.top-divider {
+    position: relative;
+    height: 3px;
+    background-color: #334155; /* similar to divider-line */
+    margin-bottom: 10px; /* space below the line */
+    width: 100%;
+}
+
+.notes-search {
+    width: 100%;
+    padding: 8px 10px;
+    border: none;
+    border-radius: 6px;
+    background-color: #1E293B;
+    color: #E5E7EB;
+    outline: none;
+    font-size: 14px;
+    box-sizing: border-box;
+}
+
+.search-and-button {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    margin-bottom: 1px;
+    margin-top: 5px;
+    padding: 8px 10px; 
+    background-color: #0F172A; 
+    box-sizing: border-box;
+}
+
+.notes-search {
+    flex: 1;
+    padding: 6px 10px;        
+    border: none;
+    border-radius: 6px;
+    background-color: #1E293B;
+    color: #E5E7EB;
+    outline: none;
+    font-size: 14px;
+    line-height: 1;          
+    height: 30px;             
+    box-sizing: border-box;
+}
+
+.new-note-btn {
+    padding: 6px 10px;
+    font-size: 14px;
+    background-color: #3B82F6;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.new-note-btn:hover {
+    background-color: #2563EB;
+}
+
+.top-bar {
+  display: flex;
+  align-items: center;     /* vertically center */
+  justify-content: space-between; /* text left, buttons right */
+  margin: 5px 0 5px 0;;
+}
+
+.top-bar-title {
+  margin: 10px;               /* remove default p margins */
+  font-weight: 600;        /* optional, to make text stand out */
+  font-size: 18px;         /* adjust size if needed */
+}
+
+.top-buttons {
+  display: flex;
+  justify-content: flex-end; /* align right */
+  gap: 8px; /* space between buttons */
+  margin: 5px 0 5px 0;
+  padding-top: 0; /* remove any top padding */
+}
+
+.top-buttons button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  color: #E5E7EB;
+  transition: background-color 0.2s ease;
+}
+
+.edit-btn {
+  background-color: #3B82F6;
+}
+
+.edit-btn:hover {
+  background-color: #2563EB;
+}
+
+.delete-btn {
+  background-color: #EF4444;
+}
+
+.delete-btn:hover {
+  background-color: #B91C1C;
+}
+
+.right-pane p {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.title-label {
+  margin-left: 10px;
+}
+
+.bottom-divider-title {
+    position: relative;
+    height: 3px;
+    background-color: #334155; /* similar to divider-line */
+    margin-bottom: 10px; /* space below the line */
+    width: 100%;
+}
+
+
+.markdown-container {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+    height: 100%;
+}
+
+.markdown-input {
+    width: 50%;
+    min-height: 300px;
+    max-height: 748px;;
+    padding: 10px;
+    font-size: 1rem;
+    resize: none;
+    border: 1px solid #0F172A;
+    border-radius: 5px;
+    font-family: monospace;
+    background-color: #0e1423; /* Dark */
+    color: #ffffff;
+    overflow-y: auto;
+    resize: none;
+}
+
+.markdown-preview {
+    width: 50%;
+    min-height: 300px;
+    max-height: 748px;
+    padding: 10px;
+    border: 1px solid #0F172A;
+    background-color: #e3cfcf; /* Slightly lighter */
+    color: #000000;
+    overflow-y: auto;
+    border-radius: 5px;
+}
+
+.markdown-input:focus {
+    outline: none;
+    border-color: #94a3b8; /* Optional: replace with a color you want on focus */
+    box-shadow: none; /* Optional: also disables shadow highlight */
+}
+
+ul, ol {
+  list-style: none; /* This would hide bullet points */
+}
+blockquote {
+  border: none; /* This would hide the quote styling */
+}
+
+.markdown-preview ul {
+  list-style-type: disc;
+  padding-left: 1.5rem;
+}
+
+.markdown-preview ol {
+  list-style-type: decimal;
+  padding-left: 1.5rem;
+}
+
+.markdown-preview blockquote {
+  border-left: 4px solid #ccc;
+  padding-left: 1rem;
+  color: #666;
+  margin: 1rem 0;
+  font-style: italic;
+}
+
+.markdown-preview pre {
+  background-color: #1e293b;
+  color: #fff;
+  padding: 1rem;
+  border-radius: 5px;
+  overflow-x: auto;
 }
