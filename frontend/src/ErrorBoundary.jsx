@@ -11,15 +11,24 @@ class ErrorBoundary extends React.Component {
         return { hasError: true };
     }
 
+    componentDidUpdate(prevProps) {
+        if (prevProps.resetKey !== this.props.resetKey && this.state.hasError) {
+            // Reset the error state when resetKey changes
+            this.setState({ hasError: false });
+        }
+    }
+
     componentDidCatch(error, errorInfo) {
+        console.error("Markdown rendering error:", error, errorInfo);
     }
 
     render() {
         if (this.state.hasError) {
-            return null;
+            console.error("Error rendering markdown");
+            return <div style={{ color: 'red' }}>⚠️ Error rendering markdown.</div>
         }
 
-        return this.props.children; 
+        return this.props.children;
     }
 }
 

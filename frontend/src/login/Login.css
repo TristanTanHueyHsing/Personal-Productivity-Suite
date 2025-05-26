@@ -118,3 +118,22 @@ body, html {
     border: 1px solid #4B5563;
   }
    */
+
+   .toggle-option {
+    margin-top: 15px;
+    text-align: center;
+    color: #d4d4d8;
+    font-size: 14px;
+}
+
+.toggle-option span {
+    color: #34d399;
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.success-popup {
+    margin-top: 10px;
+    color: green;
+    font-size: 14px;
+}

@@ -6,10 +6,17 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import rehypeRaw from 'rehype-raw';
 import ErrorBoundary from '../ErrorBoundary';
+import remarkHighlight from '../remarkHighlight';
 
 const Notes = () => {
     const [, setAnimateSnapshots] = useState(false);
     const [markdown, setMarkdown] = useState('');
+    const [resetKey, setResetKey] = useState(0);
+
+    const handleChange = (e) => {
+        setMarkdown(e.target.value);
+        setResetKey((prevKey) => prevKey + 1); // Increment the key to reset the component
+    };
 
     useEffect(() => {
         const timeout = setTimeout(() => {
@@ -60,19 +67,20 @@ const Notes = () => {
                         <textarea
                             className="markdown-input"
                             value={markdown}
-                            onChange={(e) => setMarkdown(e.target.value)}
+                            onChange={handleChange}
                             placeholder="Write your note in Markdown..."
                         />
                         <div className="markdown-preview">
-                            <ErrorBoundary>
-                                <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]} components={{
+                            <ErrorBoundary resetKey={resetKey}>
+                                <ReactMarkdown remarkPlugins={[remarkGfm, remarkHighlight]} rehypePlugins={[rehypeRaw]} components={{
                                     p: ({ node, ...props }) => <p style={{ whiteSpace: 'pre-wrap' }} {...props} />
-                                }}>{markdown}</ReactMarkdown>
+                                }}>
+                                    {markdown}
+                                </ReactMarkdown>
                             </ErrorBoundary>
                         </div>
                     </div>
                 </div>
-
 
             </div>
         </div>
