@@ -64,7 +64,7 @@ const Sidebar = () => {
                     <span className="label">Pomodoro</span>
                 </Link>
 
-                <Link to="/pomodoro" className={activeTab === "Calendar" ? "active" : ""}>
+                <Link to="/calendar" className={activeTab === "Calendar" ? "active" : ""}>
                     <span className="icon">📅</span>
                     <span className="label">Calendar</span>
                 </Link>

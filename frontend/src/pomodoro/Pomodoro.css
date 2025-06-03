@@ -1,0 +1,275 @@
+@import url('https://fonts.googleapis.com/css2?family=Bungee&display=swap');
+
+/* Container styling */
+.app-container-pomodoro {
+    display: flex;
+    margin-left: 14.5%;
+    height: 100vh;
+    background-color: #0F172A;
+    color: #E5E7EB;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+.main-content-pomodoro {
+    flex: 1;
+    background: linear-gradient(135deg, #0F172A 0%, #1A202C 100%);
+    padding: 40px;
+    box-sizing: border-box;
+    overflow-y: auto;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+}
+
+.main-content-pomodoro h1 {
+    font-size: 36px;
+    font-weight: 700;
+    color: #94A3B8;
+    margin-bottom: 40px;
+    text-align: center;
+    letter-spacing: -0.025em;
+}
+
+/* Timer display and ring */
+.timer-wrapper {
+    position: relative;
+    width: 300px;
+    height: 300px;
+    margin-bottom: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.progress-ring {
+    transform: rotate(-90deg);
+    filter: drop-shadow(0 0 12px rgba(64, 224, 208, 0.4));
+}
+
+.progress-ring__circle,
+.progress-ring__circle-bg {
+    transition: stroke-dashoffset 0.35s ease-in-out;
+    transform-origin: center;
+}
+
+.progress-ring__circle-bg {
+    stroke: #1E293B;
+    stroke-width: 14;
+}
+
+.progress-ring__circle {
+    stroke: #40E0D0;
+    stroke-width: 14;
+    stroke-linecap: round;
+    filter: drop-shadow(0 0 8px rgba(64, 224, 208, 0.5));
+}
+
+.timer-display {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 50px;
+    font-weight: 800;
+    color: #40E0D0;
+    text-shadow: 0 0 20px rgba(64, 224, 208, 0.4);
+    font-family: 'Bungee', 'Impact', 'Arial Black', 'Helvetica Neue', Arial, sans-serif;
+    letter-spacing: -0.02em;
+}
+
+/* Dots container */
+.dots-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 40px;
+    padding: 20px 32px;
+    background: rgba(30, 41, 59, 0.4);
+    backdrop-filter: blur(10px);
+    border-radius: 24px;
+    border: 1px solid rgba(71, 85, 105, 0.3);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+}
+
+.pomodoro-dot {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: #374151;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: default;
+    border: 2px solid transparent;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.pomodoro-dot:hover {
+    transform: scale(1.1);
+}
+
+/* Enhanced dot colors with subtle glow effects */
+.pomodoro-dot[style*="#FCD34D"], .pomodoro-dot[style*="#FBBF24"] {
+    box-shadow: 0 0 12px rgba(252, 211, 77, 0.4), 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.pomodoro-dot[style*="#14B8A6"], .pomodoro-dot[style*="#2DD4BF"] {
+    box-shadow: 0 0 12px rgba(20, 184, 166, 0.4), 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.pomodoro-dot[style*="#8B5CF6"], .pomodoro-dot[style*="#A78BFA"] {
+    box-shadow: 0 0 12px rgba(139, 92, 246, 0.4), 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Buttons container */
+.timer-buttons {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    margin-bottom: 32px;
+}
+
+.timer-buttons button {
+    padding: 16px 32px;
+    font-size: 16px;
+    font-weight: 600;
+    border: 2px solid transparent;
+    border-radius: 16px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    font-family: inherit;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    position: relative;
+    overflow: hidden;
+    min-width: 120px;
+}
+
+.timer-buttons button:first-child {
+    background: linear-gradient(135deg, #059669 0%, #047857 100%);
+    color: white;
+    box-shadow: 0 4px 16px rgba(5, 150, 105, 0.3);
+}
+
+.timer-buttons button:first-child:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(5, 150, 105, 0.4);
+}
+
+.timer-buttons button:nth-child(2) {
+    background: linear-gradient(135deg, #D97706 0%, #B45309 100%);
+    color: white;
+    box-shadow: 0 4px 16px rgba(217, 119, 6, 0.3);
+}
+
+.timer-buttons button:nth-child(2):hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(217, 119, 6, 0.4);
+}
+
+.timer-buttons button:last-child {
+    background: linear-gradient(135deg, #DC2626 0%, #B91C1C 100%);
+    color: white;
+    box-shadow: 0 4px 16px rgba(220, 38, 38, 0.3);
+}
+
+.timer-buttons button:last-child:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(220, 38, 38, 0.4);
+}
+
+.timer-buttons button:disabled {
+    background: #374151;
+    color: #6B7280;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+    opacity: 0.6;
+}
+
+.timer-buttons button:disabled:hover {
+    transform: none;
+    box-shadow: none;
+}
+
+/* Session info */
+.session-info {
+    text-align: center;
+    background: rgba(30, 41, 59, 0.3);
+    backdrop-filter: blur(10px);
+    padding: 24px 32px;
+    border-radius: 20px;
+    border: 1px solid rgba(71, 85, 105, 0.3);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+    max-width: 400px;
+    width: 100%;
+}
+
+.session-info p {
+    margin: 8px 0;
+    font-size: 16px;
+    font-weight: 500;
+    color: #94A3B8;
+    line-height: 1.5;
+}
+
+.session-info p:first-child {
+    font-size: 18px;
+    font-weight: 600;
+    color: #CBD5E1;
+    margin-bottom: 12px;
+}
+
+.session-info p:nth-child(2) {
+    color: #A5B4FC;
+    font-weight: 600;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .main-content-pomodoro {
+        padding: 20px;
+    }
+    
+    .timer-wrapper {
+        width: 250px;
+        height: 250px;
+        margin-bottom: 32px;
+    }
+    
+    .timer-display {
+        font-size: 48px;
+    }
+    
+    .main-content-pomodoro h1 {
+        font-size: 28px;
+        margin-bottom: 32px;
+    }
+    
+    .timer-buttons {
+        flex-direction: column;
+        align-items: center;
+        gap: 12px;
+    }
+    
+    .timer-buttons button {
+        width: 200px;
+        padding: 14px 24px;
+    }
+}
+
+/* Smooth animations */
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.8;
+    }
+}
+
+.timer-display.running {
+    animation: pulse 2s infinite;
+}

@@ -137,3 +137,11 @@ body, html {
     color: green;
     font-size: 14px;
 }
+
+.success-popup {
+    color: ivory;           
+    padding: 10px;
+    border-radius: 5px;
+    margin-top: 10px;
+    transition: opacity 0.5s ease;
+}

@@ -1,71 +1,271 @@
-import React, { useEffect, useState } from "react";
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
 import './Todo.css';
-import { FiSettings } from 'react-icons/fi';
-import { FaUserCircle } from "react-icons/fa";
+import Sidebar from '../sidebar/Sidebar';
 
 const Todo = () => {
-    const [showSettingsPopup, setShowSettingsPopup] = useState(false);
-    const [activeTab, setActiveTab] = useState("To-Do");
-    const [, setAnimateSnapshots] = useState(false);
+    const [todos, setTodos] = useState([]);
+    const [newTodo, setNewTodo] = useState('');
+    const [filter, setFilter] = useState('all');
+    const [searchTerm, setSearchTerm] = useState('');
+    const [selectedPriority, setSelectedPriority] = useState('medium');
 
+    // Load todos from localStorage on component mount
     useEffect(() => {
-        const timeout = setTimeout(() => {
-            setAnimateSnapshots(true);
-        }, 200);
-        return () => clearTimeout(timeout);
-    }, []);
-
-    useEffect(() => {
-        const textarea = document.querySelector('.focus-input');
-        if (textarea) {
-            const handleInput = () => {
-                textarea.style.height = 'auto';
-                textarea.style.height = textarea.scrollHeight + 'px';
-            };
-            textarea.addEventListener('input', handleInput);
-            return () => textarea.removeEventListener('input', handleInput);
+        const savedTodos = localStorage.getItem('todos');
+        if (savedTodos) {
+            setTodos(JSON.parse(savedTodos));
         }
     }, []);
 
+    // Save todos to localStorage whenever todos change
+    useEffect(() => {
+        localStorage.setItem('todos', JSON.stringify(todos));
+    }, [todos]);
+
+    const addTodo = () => {
+        if (newTodo.trim() === '') return;
+        
+        const todo = {
+            id: Date.now(),
+            text: newTodo.trim(),
+            completed: false,
+            priority: selectedPriority,
+            createdAt: new Date().toISOString(),
+        };
+        
+        setTodos([todo, ...todos]);
+        setNewTodo('');
+        setSelectedPriority('medium');
+    };
+
+    const toggleTodo = (id) => {
+        setTodos(todos.map(todo =>
+            todo.id === id ? { ...todo, completed: !todo.completed } : todo
+        ));
+    };
+
+    const deleteTodo = (id) => {
+        setTodos(todos.filter(todo => todo.id !== id));
+    };
+
+    const updateTodo = (id, newText) => {
+        setTodos(todos.map(todo =>
+            todo.id === id ? { ...todo, text: newText } : todo
+        ));
+    };
+
+    const filteredTodos = todos.filter(todo => {
+        const matchesSearch = todo.text.toLowerCase().includes(searchTerm.toLowerCase());
+        const matchesFilter = 
+            filter === 'all' ||
+            (filter === 'active' && !todo.completed) ||
+            (filter === 'completed' && todo.completed);
+        
+        return matchesSearch && matchesFilter;
+    });
+
+    const completedCount = todos.filter(todo => todo.completed).length;
+    const activeCount = todos.filter(todo => !todo.completed).length;
+
+    const handleKeyPress = (e) => {
+        if (e.key === 'Enter') {
+            addTodo();
+        }
+    };
+
     return (
-        <div className="app-container">
-            {/* Sidebar */}
-            <aside className="sidebar">
-                <nav>
-                    <ul className="nav-links">
-                        <li className={activeTab === "Homepage" ? "active" : ""} onClick={() => setActiveTab("Homepage")}><Link to="/homepage" onClick={() => setActiveTab("Homepage")}>Home</Link></li>
-                        <li className={activeTab === "Notes" ? "active" : ""} ><Link to="/notes" onClick={() => setActiveTab("Notes")}>Notes</Link></li>
-                        <li className={activeTab === "To-Do" ? "active" : ""} onClick={() => setActiveTab("To-Do")}><Link to="/todo" onClick={() => setActiveTab("To-Do")}>To-Do</Link></li>
-                        <li className={activeTab === "Journal" ? "active" : ""} onClick={() => setActiveTab("Journal")}><Link to="/journal" onClick={() => setActiveTab("Journal")}>Journal</Link></li>
-                        <li className={activeTab === "Pomodoro" ? "active" : ""} onClick={() => setActiveTab("Pomodoro")}><Link to="/pomodoro" onClick={() => setActiveTab("Pomodoro")}>Pomodoro</Link></li>
-                        <li className={activeTab === "Dashboard" ? "active" : ""} onClick={() => setActiveTab("Dashboard")}><Link to="/dashboard" onClick={() => setActiveTab("Dashboard")}>Dashboard</Link></li>
-                    </ul>
-                    <div className="spacer"></div>
-                    <hr className="separator" />
-                    <ul className="nav-links">
-                        <li className={activeTab === "Trash" ? "active" : ""} onClick={() => setActiveTab("Trash")}><Link to="/trash" onClick={() => setActiveTab("Trash")}>Trash</Link></li>
-                    </ul>
-                </nav>
-                <div className="sidebar-bottom">
-                    <div className="user-info">
-                        <FaUserCircle className="user-icon" />
-                        <p className="username"><b>John Doe</b></p>
-                        <div className="settings-container" style={{ position: 'relative' }}>
-                            <FiSettings className="settings-icon" onClick={() => setShowSettingsPopup(prev => !prev)} />
-                            {showSettingsPopup && (
-                                <div className="settings-popup">
-                                    <ul>
-                                        <li>Profile</li>
-                                        <li>Account Settings</li>
-                                        <li>Logout</li>
-                                    </ul>
-                                </div>
-                            )}
+        <div className="app-container-todo">
+            <Sidebar />
+            <div className="main-content-todo">
+                {/* Header */}
+                <div className="todo-page-header">
+                    <h1 className="todo-page-title">Todo List</h1>
+                    <div className="todo-page-stats">
+                        <div className="todo-stat-badge">
+                            Active: {activeCount}
+                        </div>
+                        <div className="todo-stat-badge">
+                            Completed: {completedCount}
                         </div>
                     </div>
                 </div>
-            </aside>
+
+                {/* Add Todo Section */}
+                <div className="todo-creation-section">
+                    <h3 className="todo-creation-title">Add New Task</h3>
+                    
+                    <div className="todo-creation-form">
+                        <input
+                            type="text"
+                            value={newTodo}
+                            onChange={(e) => setNewTodo(e.target.value)}
+                            onKeyPress={handleKeyPress}
+                            placeholder="What needs to be done?"
+                            className="todo-text-input"
+                        />
+                        
+                        <select
+                            value={selectedPriority}
+                            onChange={(e) => setSelectedPriority(e.target.value)}
+                            className="todo-priority-selector"
+                        >
+                            <option value="low">🟢 Low</option>
+                            <option value="medium">🟡 Medium</option>
+                            <option value="high">🔴 High</option>
+                        </select>
+                        
+                        <button onClick={addTodo} className="todo-add-button">
+                            Add Task
+                        </button>
+                    </div>
+                </div>
+
+                {/* Filters */}
+                <div className="todo-filter-section">
+                    <input
+                        type="text"
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                        placeholder="Search tasks..."
+                        className="todo-search-field"
+                    />
+                    
+                    <div className="todo-filter-buttons">
+                        {['all', 'active', 'completed'].map((filterType) => (
+                            <button
+                                key={filterType}
+                                onClick={() => setFilter(filterType)}
+                                className={`todo-filter-button ${filter === filterType ? 'active' : ''}`}
+                            >
+                                {filterType}
+                            </button>
+                        ))}
+                    </div>
+                </div>
+
+                {/* Todo List */}
+                <div className="todo-items-container">
+                    {filteredTodos.length === 0 ? (
+                        <div className="todo-empty-message">
+                            <h3 className="todo-empty-title">
+                                {todos.length === 0 ? 'No tasks yet' : 'No matching tasks'}
+                            </h3>
+                            <p className="todo-empty-description">
+                                {todos.length === 0 
+                                    ? 'Add your first task to get started!' 
+                                    : 'Try adjusting your search or filter.'}
+                            </p>
+                        </div>
+                    ) : (
+                        filteredTodos.map((todo) => (
+                            <TaskCard
+                                key={todo.id}
+                                todo={todo}
+                                onToggle={toggleTodo}
+                                onDelete={deleteTodo}
+                                onUpdate={updateTodo}
+                            />
+                        ))
+                    )}
+                </div>
+            </div>
+        </div>
+    );
+};
+
+const TaskCard = ({ todo, onToggle, onDelete, onUpdate }) => {
+    const [isEditing, setIsEditing] = useState(false);
+    const [editText, setEditText] = useState(todo.text);
+
+    const getPriorityEmoji = (priority) => {
+        switch (priority) {
+            case 'high': return '🔴';
+            case 'medium': return '🟡';
+            case 'low': return '🟢';
+            default: return '⚪';
+        }
+    };
+
+    const getPriorityClass = (priority) => {
+        switch (priority) {
+            case 'high': return 'task-priority-high';
+            case 'medium': return 'task-priority-medium';
+            case 'low': return 'task-priority-low';
+            default: return '';
+        }
+    };
+
+    const handleUpdate = () => {
+        if (editText.trim() !== '') {
+            onUpdate(todo.id, editText.trim());
+        }
+        setIsEditing(false);
+    };
+
+    const handleKeyPress = (e) => {
+        if (e.key === 'Enter') {
+            handleUpdate();
+        }
+        if (e.key === 'Escape') {
+            setEditText(todo.text);
+            setIsEditing(false);
+        }
+    };
+
+    return (
+        <div className="task-card">
+            {/* Checkbox */}
+            <button
+                onClick={() => onToggle(todo.id)}
+                className={`task-complete-button ${todo.completed ? 'completed' : ''}`}
+            >
+                {todo.completed && '✓'}
+            </button>
+
+            {/* Priority Indicator */}
+            <span className="task-priority-icon">
+                {getPriorityEmoji(todo.priority)}
+            </span>
+
+            {/* Task Content */}
+            <div className="task-content-area">
+                {isEditing ? (
+                    <input
+                        type="text"
+                        value={editText}
+                        onChange={(e) => setEditText(e.target.value)}
+                        onKeyDown={handleKeyPress}
+                        onBlur={handleUpdate}
+                        autoFocus
+                        className="task-edit-field"
+                    />
+                ) : (
+                    <div>
+                        <p
+                            onClick={() => setIsEditing(true)}
+                            className={`task-title-text ${todo.completed ? 'completed' : ''}`}
+                        >
+                            {todo.text}
+                        </p>
+                        <div className="task-metadata">
+                            <span className="task-created-date">
+                                {new Date(todo.createdAt).toLocaleDateString()}
+                            </span>
+                            <span className={`task-priority-label ${getPriorityClass(todo.priority)}`}>
+                                {todo.priority}
+                            </span>
+                        </div>
+                    </div>
+                )}
+            </div>
+
+            {/* Delete Button */}
+            <button
+                onClick={() => onDelete(todo.id)}
+                className="task-remove-button"
+            >
+                🗑️
+            </button>
         </div>
     );
 };

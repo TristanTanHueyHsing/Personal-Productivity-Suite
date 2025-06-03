@@ -288,9 +288,16 @@ const Login = () => {
                 if (isRegistering) {
                     setSuccessMessage("Account created successfully! You can now log in.");
                     setIsRegistering(false);
+                    setTimeout(() => setSuccessMessage(""), 2000);
                 } else {
                     navigate('/homepage');
                 }
+
+                setEmail("");
+                setUsername("");
+                setPassword("");
+                setConfirmPassword("");
+
             } else {
                 setError(data.detail || (isRegistering ? "Registration failed" : "Login failed"));
                 setTimeout(() => setError(''), 2000);
@@ -360,6 +367,10 @@ const Login = () => {
                                 setIsRegistering(false);
                                 setSuccessMessage("");
                                 setError("");
+                                setEmail("");
+                                setUsername("");
+                                setPassword("");
+                                setConfirmPassword("");
                             }}>
                                 Log in
                             </span>
@@ -371,6 +382,10 @@ const Login = () => {
                                 setIsRegistering(true);
                                 setError("");
                                 setSuccessMessage("");
+                                setEmail("");
+                                setUsername("");
+                                setPassword("");
+                                setConfirmPassword("");
                             }}>
                                 Create one
                             </span>

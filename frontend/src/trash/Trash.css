@@ -1,0 +1,380 @@
+@import url('https://fonts.googleapis.com/css2?family=Bungee&display=swap');
+
+/* Trash Container */
+.app-container-trash {
+    display: flex;
+    margin-left: 14.5%;
+    height: 100vh;
+    background-color: #0F172A;
+    color: #E5E7EB;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+.main-content-trash {
+    flex: 1;
+    background: linear-gradient(135deg, #0F172A 0%, #1A202C 100%);
+    padding: 40px;
+    box-sizing: border-box;
+    overflow-y: auto;
+    position: relative;
+}
+
+/* Header */
+.trash-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 40px;
+}
+
+.trash-page-title {
+    font-size: 36px;
+    font-weight: 700;
+    color: #94A3B8;
+    margin: 0;
+    letter-spacing: -0.025em;
+}
+
+.trash-stats {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+
+.trash-stat-badge {
+    background: rgba(30, 41, 59, 0.4);
+    border-radius: 16px;
+    padding: 12px 20px;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(71, 85, 105, 0.3);
+    color: #94A3B8;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+/* Actions Section */
+.trash-actions-section {
+    background: rgba(30, 41, 59, 0.3);
+    border-radius: 20px;
+    padding: 24px;
+    margin-bottom: 32px;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(71, 85, 105, 0.3);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.trash-controls {
+    display: flex;
+    align-items: center;
+}
+
+.select-all-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-weight: 500;
+    color: #CBD5E1;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.select-all-checkbox input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    accent-color: #40E0D0;
+    border-radius: 4px;
+}
+
+.trash-action-buttons {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.trash-btn {
+    border: none;
+    border-radius: 12px;
+    padding: 12px 20px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    backdrop-filter: blur(10px);
+    min-width: 120px;
+}
+
+.trash-btn-restore {
+    background: linear-gradient(135deg, #059669 0%, #047857 100%);
+    color: white;
+    box-shadow: 0 4px 16px rgba(5, 150, 105, 0.3);
+}
+
+.trash-btn-restore:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(5, 150, 105, 0.4);
+}
+
+.trash-btn-delete {
+    background: linear-gradient(135deg, #DC2626 0%, #B91C1C 100%);
+    color: white;
+    box-shadow: 0 4px 16px rgba(220, 38, 38, 0.3);
+}
+
+.trash-btn-delete:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(220, 38, 38, 0.4);
+}
+
+.trash-btn-empty {
+    background: rgba(30, 41, 59, 0.4);
+    border: 1px solid rgba(71, 85, 105, 0.3);
+    color: #94A3B8;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+}
+
+.trash-btn-empty:hover:not(:disabled) {
+    background: rgba(30, 41, 59, 0.6);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+}
+
+.trash-btn-empty:disabled {
+    background: rgba(30, 41, 59, 0.2);
+    color: #64748B;
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+/* Empty State */
+.trash-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 50vh;
+    text-align: center;
+    color: #94A3B8;
+}
+
+.trash-empty-icon {
+    font-size: 64px;
+    margin-bottom: 24px;
+    opacity: 0.5;
+}
+
+.trash-empty-title {
+    font-size: 28px;
+    font-weight: 600;
+    margin: 0 0 12px 0;
+    color: #CBD5E1;
+}
+
+.trash-empty-description {
+    font-size: 18px;
+    margin: 0;
+    opacity: 0.8;
+    color: #94A3B8;
+}
+
+/* Trash Items Container */
+.trash-items-container {
+    background: rgba(30, 41, 59, 0.3);
+    border-radius: 20px;
+    padding: 24px;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(71, 85, 105, 0.3);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+    max-height: calc(100vh - 400px);
+    overflow-y: auto;
+}
+
+/* Individual Trash Item */
+.trash-item-card {
+    background: rgba(30, 41, 59, 0.4);
+    border-radius: 16px;
+    padding: 20px;
+    margin-bottom: 12px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 1px solid rgba(71, 85, 105, 0.3);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    position: relative;
+    cursor: pointer;
+}
+
+.trash-item-card:hover {
+    background: rgba(30, 41, 59, 0.6);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+}
+
+.trash-item-card.selected {
+    background: rgba(64, 224, 208, 0.1);
+    border-color: rgba(64, 224, 208, 0.3);
+    box-shadow: 0 0 0 2px rgba(64, 224, 208, 0.1), 0 4px 16px rgba(0, 0, 0, 0.2);
+}
+
+.item-checkbox {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+}
+
+.item-checkbox input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    accent-color: #40E0D0;
+    border-radius: 4px;
+}
+
+.item-icon {
+    font-size: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background: rgba(30, 41, 59, 0.6);
+    border-radius: 12px;
+    border: 1px solid rgba(71, 85, 105, 0.3);
+}
+
+.item-details {
+    flex: 1;
+    min-width: 0;
+}
+
+.item-name {
+    font-size: 18px;
+    font-weight: 600;
+    color: #E5E7EB;
+    margin-bottom: 8px;
+    word-break: break-word;
+    line-height: 1.4;
+}
+
+.item-metadata {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    font-size: 14px;
+    color: #64748B;
+}
+
+.item-location {
+    color: #94A3B8;
+    font-weight: 500;
+}
+
+.item-size {
+    color: #CBD5E1;
+    font-weight: 600;
+}
+
+.item-deleted-date {
+    color: #64748B;
+    font-style: italic;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .main-content-trash {
+        margin-left: 0;
+        padding: 20px;
+        margin: 0.5rem;
+        border-radius: 15px;
+    }
+    
+    .trash-header {
+        flex-direction: column;
+        gap: 20px;
+        align-items: flex-start;
+    }
+    
+    .trash-page-title {
+        font-size: 28px;
+    }
+    
+    .trash-stats {
+        width: 100%;
+        justify-content: flex-start;
+    }
+    
+    .trash-actions-section {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+    }
+    
+    .trash-action-buttons {
+        width: 100%;
+        justify-content: flex-start;
+    }
+    
+    .trash-btn {
+        min-width: auto;
+        flex: 1;
+    }
+    
+    .trash-item-card {
+        flex-wrap: wrap;
+        gap: 12px;
+        padding: 16px;
+    }
+    
+    .item-details {
+        width: 100%;
+    }
+    
+    .item-metadata {
+        flex-direction: column;
+        gap: 8px;
+    }
+    
+    .trash-items-container {
+        max-height: none;
+    }
+}
+
+/* Custom scrollbar for trash items */
+.trash-items-container::-webkit-scrollbar {
+    width: 8px;
+}
+
+.trash-items-container::-webkit-scrollbar-track {
+    background: rgba(30, 41, 59, 0.3);
+    border-radius: 4px;
+}
+
+.trash-items-container::-webkit-scrollbar-thumb {
+    background: rgba(71, 85, 105, 0.5);
+    border-radius: 4px;
+}
+
+.trash-items-container::-webkit-scrollbar-thumb:hover {
+    background: rgba(71, 85, 105, 0.7);
+}
+
+/* Animation for buttons */
+@keyframes buttonPulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+.trash-btn:active {
+    animation: buttonPulse 0.1s ease;
+}
