@@ -259,17 +259,3 @@
         padding: 14px 24px;
     }
 }
-
-/* Smooth animations */
-@keyframes pulse {
-    0%, 100% {
-        opacity: 1;
-    }
-    50% {
-        opacity: 0.8;
-    }
-}
-
-.timer-display.running {
-    animation: pulse 2s infinite;
-}

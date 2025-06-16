@@ -34,10 +34,33 @@
     gap: 1rem;
     transition: background 0.2s ease;
     margin: 50px 20px 20px 20px;
+    color: #E5E7EB; /* Make text white */
+    text-decoration: none; /* Remove underline */
+    border: 1px solid #14B8A6;
+    background-color: #121213;
 }
 
 .profile-section:hover {
     background-color: #2A2C33;
+    color: #E5E7EB; /* Keep white on hover */
+}
+
+.profile-section.active {
+    background-color: #2A2C33;
+    color: #14B8A6; /* Teal color when active */
+}
+
+/* Ensure the icon is also white */
+.profile-section .icon {
+    color: #E5E7EB;
+}
+
+.profile-section:hover .icon {
+    color: #14B8A6;
+}
+
+.profile-section.active .icon {
+    color: #14B8A6;
 }
 
 .nav-links {
@@ -90,37 +113,36 @@
     margin: 0rem 1rem 0.5rem 0;
 }
 
-.profile-section,
 .top-section {
     border: 1px solid #14B8A6;
     background-color: #121213;
 }
 
-    .sidebar .nav-links a span,
-    .sidebar .profile-section span,
-    .sidebar .settings span {
-        display: none;
-    }
+.sidebar .nav-links a span,
+.sidebar .profile-section span,
+.sidebar .settings span {
+    display: none;
+}
 
-    .sidebar .nav-links a span,
-    .sidebar .profile-section span,
-    .sidebar .settings span {
-        display: inline;
-    }
+.sidebar .nav-links a span,
+.sidebar .profile-section span,
+.sidebar .settings span {
+    display: inline;
+}
 
-    .nav-links,
-    .settings,
-    .profile-section {
-        justify-content: center;
-    }
+.nav-links,
+.settings,
+.profile-section {
+    justify-content: center;
+}
 
-    .sidebar .nav-links,
-    .sidebar .settings,
-    .sidebar .profile-section {
-        justify-content: flex-start;
-    }
+.sidebar .nav-links,
+.sidebar .settings,
+.sidebar .profile-section {
+    justify-content: flex-start;
+}
 
-    @media (max-height: 600px) {
+@media (max-height: 600px) {
     .nav-links a,
     .profile-section,
     .settings {
@@ -150,5 +172,3 @@
     background-color: #2A2C33;
     color: #14B8A6;
 }
-
-

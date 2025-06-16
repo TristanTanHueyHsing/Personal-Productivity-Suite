@@ -1,0 +1,839 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+/* Profile Container - Fixed overflow issues */
+.app-container-profile {
+    display: flex;
+    height: 100vh;
+    max-height: 100vh; /* Prevent overflow */
+    background-color: #0F172A;
+    color: #E5E7EB;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    overflow: hidden; /* Prevent container overflow */
+}
+
+.main-content-profile {
+    flex: 1;
+    background: linear-gradient(135deg, #0F172A 0%, #1A202C 100%);
+    padding: 20px; /* Reduced from 40px */
+    box-sizing: border-box;
+    overflow-y: auto; /* Allow scrolling within content */
+    position: relative;
+    margin-left: 14.5%;
+    display: flex;
+    flex-direction: column;
+    min-height: 0; /* Important for flex child overflow */
+}
+
+/* Header - Fixed spacing */
+.profile-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px; /* Reduced from 40px */
+    flex-wrap: wrap;
+    gap: 20px;
+    flex-shrink: 0; /* Prevent shrinking */
+}
+
+.profile-header h1 {
+    font-size: 36px;
+    font-weight: 700;
+    color: #94A3B8;
+    margin: 0;
+    letter-spacing: -0.025em;
+}
+
+.profile-actions {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.edit-profile-btn,
+.delete-profile-btn {
+    border: none;
+    padding: 14px 24px;
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    text-transform: none;
+    letter-spacing: 0.025em;
+    min-width: 140px;
+    justify-content: center;
+    font-family: inherit;
+}
+
+.edit-profile-btn {
+    background: linear-gradient(135deg, #059669 0%, #047857 100%);
+    color: white;
+    box-shadow: 0 4px 16px rgba(5, 150, 105, 0.25);
+}
+
+.edit-profile-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(5, 150, 105, 0.35);
+}
+
+.delete-profile-btn {
+    background: linear-gradient(135deg, #DC2626 0%, #B91C1C 100%);
+    color: white;
+    box-shadow: 0 4px 16px rgba(220, 38, 38, 0.25);
+}
+
+.delete-profile-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(220, 38, 38, 0.35);
+}
+
+.edit-profile-btn span,
+.delete-profile-btn span {
+    font-size: 1.1rem;
+    line-height: 1;
+}
+
+/* Profile View - Fixed overflow and increased size */
+.profile-view {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 0;
+    height: 100%; /* Use full available height */
+}
+
+.profile-card {
+    background: rgba(30, 41, 59, 0.4);
+    border-radius: 20px;
+    padding: 40px; /* Increased back to 40px for more space */
+    backdrop-filter: blur(16px);
+    border: 1px solid rgba(71, 85, 105, 0.2);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start; /* Changed from center to start */
+    text-align: center;
+    box-sizing: border-box;
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    min-height: 500px; /* Ensure minimum height */
+}
+
+.profile-avatar {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 50px; /* Increased spacing */
+}
+
+.avatar-circle {
+    width: 220px; /* Increased from 200px */
+    height: 220px; /* Increased from 200px */
+    border-radius: 50%;
+    background: linear-gradient(135deg, #40E0D0 0%, #059669 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 90px; /* Increased from 80px */
+    font-weight: 700;
+    color: white;
+    box-shadow: 0 20px 60px rgba(64, 224, 208, 0.5);
+    position: relative;
+    border: 4px solid rgba(64, 224, 208, 0.3);
+}
+
+.avatar-circle::before {
+    content: '';
+    position: absolute;
+    inset: -8px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #40E0D0, #059669);
+    z-index: -1;
+    opacity: 0.7;
+    filter: blur(16px);
+}
+
+.profile-info {
+    display: flex;
+    flex-direction: column;
+    gap: 30px; /* Increased back to 30px */
+    max-width: 800px; /* Increased from 700px */
+    margin: 0 auto;
+    flex: 1;
+    min-height: 0;
+}
+
+.profile-info .info-section {
+    flex: none;
+}
+
+.info-section {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    background: rgba(30, 41, 59, 0.3);
+    padding: 32px 50px; /* Increased back to original size */
+    border-radius: 20px;
+    border: 1px solid rgba(71, 85, 105, 0.3);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+    box-sizing: border-box;
+    min-height: 100px; /* Ensure minimum height for each section */
+}
+
+.info-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #40E0D0 0%, #059669 100%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.info-section:hover {
+    background: rgba(30, 41, 59, 0.5);
+    transform: translateY(-4px);
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.25);
+    border-color: rgba(64, 224, 208, 0.3);
+}
+
+.info-section:hover::before {
+    opacity: 1;
+}
+
+.info-section label {
+    color: #CBD5E1;
+    font-weight: 700;
+    font-size: 16px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    opacity: 0.9;
+    margin-bottom: 8px;
+}
+
+.info-value {
+    color: #E5E7EB;
+    font-size: 24px;
+    line-height: 1.4;
+    font-weight: 600;
+    min-height: 32px;
+    word-break: break-all;
+}
+
+/* Profile Edit - Modern redesigned layout */
+.profile-edit {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 32px;
+    flex: 1;
+    min-height: 0;
+    height: 100%;
+    align-items: start;
+}
+
+/* Main Edit Form - Redesigned with modern card layout */
+.edit-form {
+    background: rgba(30, 41, 59, 0.6);
+    border-radius: 24px;
+    padding: 48px;
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(64, 224, 208, 0.1);
+    box-shadow: 
+        0 20px 40px rgba(0, 0, 0, 0.3),
+        0 0 0 1px rgba(64, 224, 208, 0.05);
+    position: relative;
+    overflow: hidden;
+}
+
+.edit-form h3 {
+    color: #E5E7EB;
+    font-size: 32px;
+    font-weight: 800;
+    margin: 0 0 40px 0;
+    letter-spacing: -0.025em;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.edit-form h3::before {
+    content: '✏️';
+    font-size: 28px;
+}
+
+/* Form Grid Layout */
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-bottom: 32px;
+}
+
+.form-grid-full {
+    grid-column: 1 / -1;
+}
+
+/* Enhanced Form Sections */
+.form-section {
+    margin-bottom: 0;
+    position: relative;
+}
+
+.form-section label {
+    color: #40E0D0;
+    font-weight: 700;
+    margin-bottom: 12px;
+    display: block;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    opacity: 0.9;
+    transition: all 0.3s ease;
+}
+
+.profile-input {
+    background: rgba(15, 23, 42, 0.8);
+    border: 2px solid rgba(71, 85, 105, 0.3);
+    border-radius: 16px;
+    padding: 20px 24px;
+    color: #E5E7EB;
+    font-size: 16px;
+    width: 100%;
+    backdrop-filter: blur(10px);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    font-family: inherit;
+    box-sizing: border-box;
+    outline: none;
+    font-weight: 500;
+    min-height: 60px;
+    position: relative;
+}
+
+.profile-input::placeholder {
+    color: #64748B;
+    opacity: 0.7;
+    font-weight: 400;
+}
+
+.profile-input:focus {
+    border-color: #40E0D0;
+    background: rgba(15, 23, 42, 0.95);
+    box-shadow: 
+        0 0 0 4px rgba(64, 224, 208, 0.1),
+        0 8px 32px rgba(64, 224, 208, 0.2);
+    transform: translateY(-2px);
+}
+
+.profile-input:focus + label {
+    color: #40E0D0;
+    transform: translateY(-2px);
+}
+
+/* Password Section - Redesigned as sidebar */
+.password-form {
+    background: rgba(30, 41, 59, 0.4);
+    border-radius: 24px;
+    padding: 32px;
+    backdrop-filter: blur(16px);
+    border: 1px solid rgba(71, 85, 105, 0.2);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.2);
+    position: sticky;
+    top: 20px;
+    height: fit-content;
+}
+
+.password-form h2 {
+    color: #94A3B8;
+    font-size: 24px;
+    font-weight: 700;
+    margin: 0 0 24px 0;
+    letter-spacing: -0.025em;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.password-form h2::before {
+    content: '🔐';
+    font-size: 20px;
+}
+
+.password-form .form-section {
+    margin-bottom: 20px;
+}
+
+.password-form .profile-input {
+    background: rgba(15, 23, 42, 0.6);
+    min-height: 52px;
+    padding: 16px 20px;
+    font-size: 15px;
+}
+
+/* Modern Action Buttons */
+.form-actions {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    margin-top: 48px;
+    padding-top: 32px;
+    border-top: 1px solid rgba(64, 224, 208, 0.1);
+}
+
+.password-actions {
+    display: flex;
+    justify-content: center;
+    margin-top: 32px;
+    padding-top: 24px;
+    border-top: 1px solid rgba(71, 85, 105, 0.2);
+}
+
+.save-profile-btn,
+.cancel-profile-btn {
+    padding: 18px 36px;
+    border: none;
+    border-radius: 16px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    min-width: 160px;
+    font-family: inherit;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    position: relative;
+    overflow: hidden;
+}
+
+.save-profile-btn {
+    background: linear-gradient(135deg, #40E0D0 0%, #059669 100%);
+    color: white;
+    box-shadow: 
+        0 8px 24px rgba(64, 224, 208, 0.3),
+        0 0 0 1px rgba(64, 224, 208, 0.1);
+}
+
+.save-profile-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.6s ease;
+}
+
+.save-profile-btn:hover::before {
+    left: 100%;
+}
+
+.save-profile-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 
+        0 12px 32px rgba(64, 224, 208, 0.4),
+        0 0 0 1px rgba(64, 224, 208, 0.2);
+}
+
+.cancel-profile-btn {
+    background: rgba(30, 41, 59, 0.8);
+    color: #CBD5E1;
+    border: 2px solid rgba(71, 85, 105, 0.4);
+    backdrop-filter: blur(10px);
+}
+
+.cancel-profile-btn:hover {
+    background: rgba(30, 41, 59, 0.95);
+    color: #E5E7EB;
+    transform: translateY(-2px);
+    border-color: rgba(71, 85, 105, 0.6);
+}
+
+.save-password-btn {
+    background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%);
+    color: white;
+    border: none;
+    padding: 14px 28px;
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    min-width: 100%;
+    font-family: inherit;
+    box-shadow: 0 6px 20px rgba(239, 68, 68, 0.3);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.save-password-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 28px rgba(239, 68, 68, 0.4);
+}
+
+.save-password-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* Remove old form-section styling that conflicts */
+.form-section {
+    margin-bottom: 28px;
+}
+
+.form-section:last-of-type {
+    margin-bottom: 0;
+}
+
+/* Delete Modal */
+.delete-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.75);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    backdrop-filter: blur(8px);
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.delete-modal {
+    background: rgba(30, 41, 59, 0.95);
+    border-radius: 20px;
+    padding: 40px;
+    max-width: 500px;
+    width: 100%;
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(71, 85, 105, 0.3);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    transform: scale(0.95);
+    animation: modalIn 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+@keyframes modalIn {
+    to {
+        transform: scale(1);
+    }
+}
+
+.modal-header h3 {
+    color: #E5E7EB;
+    font-size: 24px;
+    font-weight: 700;
+    margin: 0 0 24px 0;
+    text-align: center;
+}
+
+.modal-content {
+    margin-bottom: 32px;
+}
+
+.modal-content p {
+    color: #94A3B8;
+    font-size: 16px;
+    line-height: 1.6;
+    text-align: center;
+    margin: 0;
+}
+
+.modal-actions {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+}
+
+.confirm-delete-btn,
+.cancel-delete-btn {
+    padding: 16px 32px;
+    border: none;
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    min-width: 140px;
+    font-family: inherit;
+}
+
+.confirm-delete-btn {
+    background: linear-gradient(135deg, #DC2626 0%, #B91C1C 100%);
+    color: white;
+    box-shadow: 0 4px 16px rgba(220, 38, 38, 0.25);
+}
+
+.confirm-delete-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(220, 38, 38, 0.35);
+}
+
+.cancel-delete-btn {
+    background: rgba(30, 41, 59, 0.6);
+    color: #94A3B8;
+    border: 1px solid rgba(71, 85, 105, 0.3);
+    backdrop-filter: blur(10px);
+}
+
+.cancel-delete-btn:hover {
+    background: rgba(30, 41, 59, 0.8);
+    color: #CBD5E1;
+    transform: translateY(-2px);
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+    .main-content-profile {
+        margin-left: 0;
+    }
+    
+    .profile-info {
+        gap: 20px;
+    }
+    
+    .profile-edit {
+        grid-template-columns: 1fr;
+        gap: 32px;
+        max-width: 900px;
+    }
+    
+    .password-form {
+        position: static;
+        order: -1; /* Move password form above main form on mobile */
+    }
+    
+    .form-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+}
+
+@media (max-width: 768px) {
+    .app-container-profile {
+        height: 100vh;
+        height: 100dvh;
+    }
+    
+    .main-content-profile {
+        padding: 16px;
+        margin: 0;
+    }
+    
+    .profile-header {
+        flex-direction: column;
+        align-items: stretch;
+        text-align: center;
+        margin-bottom: 16px;
+    }
+    
+    .profile-header h1 {
+        font-size: 28px;
+    }
+    
+    .profile-actions {
+        flex-direction: column;
+        width: 100%;
+    }
+    
+    .edit-profile-btn,
+    .delete-profile-btn {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .profile-card {
+        padding: 20px;
+        min-height: auto;
+    }
+    
+    .profile-edit {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    
+    .edit-form {
+        padding: 24px;
+    }
+    
+    .edit-form h3 {
+        font-size: 24px;
+        margin-bottom: 24px;
+    }
+    
+    .form-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+        margin-bottom: 24px;
+    }
+    
+    .password-form {
+        padding: 24px;
+        order: -1;
+    }
+    
+    .password-form h2 {
+        font-size: 20px;
+        margin-bottom: 20px;
+    }
+    
+    .profile-input {
+        padding: 16px 20px;
+        min-height: 52px;
+        font-size: 16px;
+    }
+    
+    .avatar-circle {
+        width: 140px;
+        height: 140px;
+        font-size: 56px;
+    }
+    
+    .profile-info {
+        gap: 20px;
+        max-width: 500px;
+    }
+    
+    .info-section {
+        padding: 20px;
+    }
+    
+    .info-value {
+        font-size: 20px;
+    }
+    
+    .form-actions {
+        flex-direction: column;
+        margin-top: 32px;
+        gap: 12px;
+    }
+    
+    .password-actions {
+        margin-top: 24px;
+    }
+    
+    .save-profile-btn,
+    .cancel-profile-btn,
+    .save-password-btn {
+        width: 100%;
+        padding: 16px 24px;
+    }
+    
+    .modal-actions {
+        flex-direction: column;
+    }
+    
+    .confirm-delete-btn,
+    .cancel-delete-btn {
+        width: 100%;
+    }
+    
+    .delete-modal {
+        padding: 24px;
+        margin: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .main-content-profile {
+        padding: 12px; /* Reduced from 16px */
+    }
+    
+    .profile-header h1 {
+        font-size: 24px;
+    }
+    
+    .avatar-circle {
+        width: 120px;
+        height: 120px;
+        font-size: 48px;
+    }
+    
+    .profile-info {
+        gap: 16px; /* Reduced from 20px */
+    }
+    
+    .info-section {
+        padding: 16px; /* Reduced from 24px */
+    }
+    
+    .info-value {
+        font-size: 18px;
+    }
+    
+    .edit-form,
+    .password-form {
+        padding: 16px; /* Reduced from 24px */
+    }
+    
+    .form-actions,
+    .password-actions {
+        margin-top: 20px; /* Consistent reduced margin */
+        padding-top: 16px; /* Consistent reduced padding */
+    }
+
+    /* Password Requirements Styling - Add this to your Profile.css */
+.password-requirements {
+    margin-top: 12px;
+    padding: 16px;
+    background: rgba(15, 23, 42, 0.5);
+    border-radius: 12px;
+    border: 1px solid rgba(71, 85, 105, 0.3);
+}
+
+.requirement {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    margin-bottom: 8px;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.requirement:last-child {
+    margin-bottom: 0;
+}
+
+.requirement.valid {
+    color: #10B981;
+}
+
+.requirement.invalid {
+    color: #EF4444;
+}
+
+.password-mismatch {
+    margin-top: 8px;
+    color: #EF4444;
+    font-size: 14px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+}
+
+/* Enhanced save button styling for disabled state */
+.save-password-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+    background: rgba(71, 85, 105, 0.5);
+}
+
+.save-password-btn:disabled:hover {
+    transform: none;
+    box-shadow: none;
+}
+}

@@ -4,6 +4,11 @@ const http = require('http');
 
 const REACT_DEV_URL = 'http://localhost:3000';
 
+if (process.platform === 'win32') {
+    // Set App User Model ID for Windows taskbar grouping
+    app.setAppUserModelId("PersonalProductivitySuite");
+}
+
 let mainWindow;
 let splash;
 

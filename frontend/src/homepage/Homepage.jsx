@@ -4,6 +4,8 @@ import './Homepage.css';
 
 const Homepage = () => {
     const [focus, setFocus] = useState("");
+    const [savedFocus, setSavedFocus] = useState(""); // Track saved focus
+    const [isFocusSaved, setIsFocusSaved] = useState(false); // Track if focus is saved
     const [mood, setMood] = useState("");
     const [currentTime, setCurrentTime] = useState(new Date());
     const [greeting, setGreeting] = useState('');
@@ -103,6 +105,26 @@ const Homepage = () => {
         return moods[moodType] || '😊';
     };
 
+    const handleFocusKeyPress = (e) => {
+        if (e.key === 'Enter' && !e.shiftKey && focus.trim() !== '') {
+            e.preventDefault();
+            setSavedFocus(focus.trim());
+            setIsFocusSaved(true);
+        }
+    };
+
+    const handleDeleteFocus = () => {
+        setSavedFocus("");
+        setFocus("");
+        setIsFocusSaved(false);
+        // Focus the input after deletion
+        setTimeout(() => {
+            if (focusInputRef.current) {
+                focusInputRef.current.focus();
+            }
+        }, 100);
+    };
+
     return (
         <div className="app-container-homepage">
             <Sidebar />
@@ -121,20 +143,43 @@ const Homepage = () => {
                     <p className="section-header">Today's Focus</p>
                     <section className={`homepage-card focus-card ${animateSnapshots ? 'snapshot-animated' : ''}`}>
                         <h2 className="card-title">🎯 Main Focus Today</h2>
-                        <textarea
-                            ref={focusInputRef}
-                            value={focus}
-                            onChange={(e) => {
-                                setFocus(e.target.value);
-                                if (focusInputRef.current) {
-                                    focusInputRef.current.style.height = "auto";
-                                    focusInputRef.current.style.height = focusInputRef.current.scrollHeight + "px";
-                                }
-                            }}
-                            placeholder="Write it here to stay mindful..."
-                            rows={1}
-                            className="focus-input"
-                        />
+                        
+                        {!isFocusSaved ? (
+                            <textarea
+                                ref={focusInputRef}
+                                value={focus}
+                                onChange={(e) => {
+                                    setFocus(e.target.value);
+                                    if (focusInputRef.current) {
+                                        focusInputRef.current.style.height = "auto";
+                                        focusInputRef.current.style.height = focusInputRef.current.scrollHeight + "px";
+                                    }
+                                }}
+                                onKeyPress={handleFocusKeyPress}
+                                placeholder="Write it here to stay mindful... (Press Enter to save)"
+                                rows={1}
+                                className="focus-input"
+                            />
+                        ) : (
+                            <div className="saved-focus-container">
+                                <div className="saved-focus-text">
+                                    {savedFocus}
+                                </div>
+                                <button 
+                                    className="delete-focus-btn"
+                                    onClick={handleDeleteFocus}
+                                    title="Delete focus to edit again"
+                                >
+                                    🗑️ Delete
+                                </button>
+                            </div>
+                        )}
+                        
+                        {!isFocusSaved && focus.trim() !== '' && (
+                            <div className="focus-hint">
+                                Press Enter to save your focus for today
+                            </div>
+                        )}
                     </section>
                 </div>
 
@@ -177,26 +222,7 @@ const Homepage = () => {
                         </div>
                     </section>
                 </div>
-
-                {/* Pomodoro Section */}
-                <div className="section-wrapper">
-                    <p className="section-header">Timer</p>
-                    <section className={`homepage-card pomodoro-card ${animateSnapshots ? 'snapshot-animated' : ''}`}>
-                        <h2 className="card-title">⏱️ Pomodoro Timer</h2>
-                        <ul className="pomodoro-list">
-                            <li className="pomodoro-item">
-                                Last session: {homepageData.pomodoro.lastSession}
-                            </li>
-                            <li className="pomodoro-item">
-                                Completed {homepageData.pomodoro.completedSessions} focus sessions
-                            </li>
-                            <li className="pomodoro-item break-mode">
-                                ⏸ Break mode: {homepageData.pomodoro.breakTime}
-                            </li>
-                        </ul>
-                    </section>
-                </div>
-
+                
                 {/* Recent Activity */}
                 <div className="section-wrapper">
                     <p className="section-header">Activities</p>

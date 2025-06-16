@@ -17,7 +17,6 @@ const Sidebar = () => {
         '/calendar': 'Calendar',
         '/dashboard': 'Dashboard',
         '/trash': 'Trash',
-        '/profile': 'Profile',
     }
 
     const activeTab = pathToTab[location.pathname] || '';
@@ -33,10 +32,10 @@ const Sidebar = () => {
     return (
         <div className="sidebar">
 
-            <div className="profile-section">
+            <Link to="/profile" className={`profile-section ${activeTab === "Profile" ? "active" : ""}`}>
                 <FaUserCircle size={24} className="icon" />
                 <span className="label">Profile</span>
-            </div>
+            </Link>
 
             <nav className="nav-links">
                 <Link to="/homepage" className={activeTab === "Homepage" ? "active" : ""}>
