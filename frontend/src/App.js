@@ -35,7 +35,6 @@ import Pomodoro from './pomodoro/Pomodoro';
 import Journal from './journal/Journal';
 import Calendar from './calendar/Calendar';
 import Dashboard from './dashboard/Dashboard';
-import Trash from './trash/Trash';
 import Profile from './profile/Profile';
 
 
@@ -51,7 +50,6 @@ function App() {
         <Route path="/pomodoro" element={<Pomodoro />} />
         <Route path="/calendar" element={<Calendar />} />
         <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/trash" element={<Trash />} />
         <Route path="/profile" element={<Profile />} />
         {/* Add more routes here as needed */}
       </Routes>

@@ -8,6 +8,9 @@ from datetime import datetime
 
 router = APIRouter()
 
+def get_local_time():
+    return datetime.now()
+
 def get_db():
     db = SessionLocal()
     try:
@@ -59,7 +62,7 @@ async def update_note(note_id: int, note_update: NoteUpdate, db: Session = Depen
     for field, value in update_data.items():
         setattr(existing_note, field, value)
     
-    existing_note.last_modified = datetime.utcnow()
+    existing_note.last_modified = get_local_time()
     db.commit()
     db.refresh(existing_note)
     return existing_note

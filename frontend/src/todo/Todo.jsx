@@ -1,689 +1,7 @@
-// import React, { useState, useEffect } from 'react';
-// import './Todo.css';
-// import Sidebar from '../sidebar/Sidebar';
-
-// const Todo = () => {
-//     const [todos, setTodos] = useState([]);
-//     const [newTodo, setNewTodo] = useState('');
-//     const [filter, setFilter] = useState('all');
-//     const [searchTerm, setSearchTerm] = useState('');
-//     const [selectedPriority, setSelectedPriority] = useState('medium');
-
-//     // Load todos from localStorage on component mount
-//     useEffect(() => {
-//         const savedTodos = localStorage.getItem('todos');
-//         if (savedTodos) {
-//             setTodos(JSON.parse(savedTodos));
-//         }
-//     }, []);
-
-//     // Save todos to localStorage whenever todos change
-//     useEffect(() => {
-//         localStorage.setItem('todos', JSON.stringify(todos));
-//     }, [todos]);
-
-//     const addTodo = () => {
-//         if (newTodo.trim() === '') return;
-
-//         const todo = {
-//             id: Date.now(),
-//             text: newTodo.trim(),
-//             completed: false,
-//             priority: selectedPriority,
-//             createdAt: new Date().toISOString(),
-//         };
-
-//         setTodos([todo, ...todos]);
-//         setNewTodo('');
-//         setSelectedPriority('medium');
-//     };
-
-//     const toggleTodo = (id) => {
-//         setTodos(todos.map(todo =>
-//             todo.id === id ? { ...todo, completed: !todo.completed } : todo
-//         ));
-//     };
-
-//     const deleteTodo = (id) => {
-//         setTodos(todos.filter(todo => todo.id !== id));
-//     };
-
-//     const updateTodo = (id, newText) => {
-//         setTodos(todos.map(todo =>
-//             todo.id === id ? { ...todo, text: newText } : todo
-//         ));
-//     };
-
-//     const filteredTodos = todos.filter(todo => {
-//         const matchesSearch = todo.text.toLowerCase().includes(searchTerm.toLowerCase());
-//         const matchesFilter = 
-//             filter === 'all' ||
-//             (filter === 'active' && !todo.completed) ||
-//             (filter === 'completed' && todo.completed);
-
-//         return matchesSearch && matchesFilter;
-//     });
-
-//     const completedCount = todos.filter(todo => todo.completed).length;
-//     const activeCount = todos.filter(todo => !todo.completed).length;
-
-//     const handleKeyPress = (e) => {
-//         if (e.key === 'Enter') {
-//             addTodo();
-//         }
-//     };
-
-//     return (
-//         <div className="app-container-todo">
-//             <Sidebar />
-//             <div className="main-content-todo">
-//                 {/* Header */}
-//                 <div className="todo-page-header">
-//                     <h1 className="todo-page-title">Todo List</h1>
-//                     <div className="todo-page-stats">
-//                         <div className="todo-stat-badge">
-//                             Active: {activeCount}
-//                         </div>
-//                         <div className="todo-stat-badge">
-//                             Completed: {completedCount}
-//                         </div>
-//                     </div>
-//                 </div>
-
-//                 {/* Add Todo Section */}
-//                 <div className="todo-creation-section">
-//                     <h3 className="todo-creation-title">Add New Task</h3>
-
-//                     <div className="todo-creation-form">
-//                         <input
-//                             type="text"
-//                             value={newTodo}
-//                             onChange={(e) => setNewTodo(e.target.value)}
-//                             onKeyPress={handleKeyPress}
-//                             placeholder="What needs to be done?"
-//                             className="todo-text-input"
-//                         />
-
-//                         <select
-//                             value={selectedPriority}
-//                             onChange={(e) => setSelectedPriority(e.target.value)}
-//                             className="todo-priority-selector"
-//                         >
-//                             <option value="low">🟢 Low</option>
-//                             <option value="medium">🟡 Medium</option>
-//                             <option value="high">🔴 High</option>
-//                         </select>
-
-//                         <button onClick={addTodo} className="todo-add-button">
-//                             Add Task
-//                         </button>
-//                     </div>
-//                 </div>
-
-//                 {/* Filters */}
-//                 <div className="todo-filter-section">
-//                     <input
-//                         type="text"
-//                         value={searchTerm}
-//                         onChange={(e) => setSearchTerm(e.target.value)}
-//                         placeholder="Search tasks..."
-//                         className="todo-search-field"
-//                     />
-
-//                     <div className="todo-filter-buttons">
-//                         {['active', 'completed', 'all'].map((filterType) => (
-//                             <button
-//                                 key={filterType}
-//                                 onClick={() => setFilter(filterType)}
-//                                 className={`todo-filter-button ${filter === filterType ? 'active' : ''}`}
-//                             >
-//                                 {filterType}
-//                             </button>
-//                         ))}
-//                     </div>
-//                 </div>
-
-//                 {/* Todo List */}
-//                 <div className="todo-items-container">
-//                     {filteredTodos.length === 0 ? (
-//                         <div className="todo-empty-message">
-//                             <h3 className="todo-empty-title">
-//                                 {todos.length === 0 ? 'No tasks yet' : 'No matching tasks'}
-//                             </h3>
-//                             <p className="todo-empty-description">
-//                                 {todos.length === 0 
-//                                     ? 'Add your first task to get started!' 
-//                                     : 'Try adjusting your search or filter.'}
-//                             </p>
-//                         </div>
-//                     ) : (
-//                         filteredTodos.map((todo) => (
-//                             <TaskCard
-//                                 key={todo.id}
-//                                 todo={todo}
-//                                 onToggle={toggleTodo}
-//                                 onDelete={deleteTodo}
-//                                 onUpdate={updateTodo}
-//                             />
-//                         ))
-//                     )}
-//                 </div>
-//             </div>
-//         </div>
-//     );
-// };
-
-// const TaskCard = ({ todo, onToggle, onDelete, onUpdate }) => {
-//     const [isEditing, setIsEditing] = useState(false);
-//     const [editText, setEditText] = useState(todo.text);
-
-//     const getPriorityEmoji = (priority) => {
-//         switch (priority) {
-//             case 'high': return '🔴';
-//             case 'medium': return '🟡';
-//             case 'low': return '🟢';
-//             default: return '⚪';
-//         }
-//     };
-
-//     const getPriorityClass = (priority) => {
-//         switch (priority) {
-//             case 'high': return 'task-priority-high';
-//             case 'medium': return 'task-priority-medium';
-//             case 'low': return 'task-priority-low';
-//             default: return '';
-//         }
-//     };
-
-//     const handleUpdate = () => {
-//         if (editText.trim() !== '') {
-//             onUpdate(todo.id, editText.trim());
-//         }
-//         setIsEditing(false);
-//     };
-
-//     const handleKeyPress = (e) => {
-//         if (e.key === 'Enter') {
-//             handleUpdate();
-//         }
-//         if (e.key === 'Escape') {
-//             setEditText(todo.text);
-//             setIsEditing(false);
-//         }
-//     };
-
-//     return (
-//         <div className="task-card">
-//             {/* Checkbox */}
-//             <button
-//                 onClick={() => onToggle(todo.id)}
-//                 className={`task-complete-button ${todo.completed ? 'completed' : ''}`}
-//             >
-//                 {todo.completed && '✓'}
-//             </button>
-
-//             {/* Priority Indicator */}
-//             <span className="task-priority-icon">
-//                 {getPriorityEmoji(todo.priority)}
-//             </span>
-
-//             {/* Task Content */}
-//             <div className="task-content-area">
-//                 {isEditing ? (
-//                     <input
-//                         type="text"
-//                         value={editText}
-//                         onChange={(e) => setEditText(e.target.value)}
-//                         onKeyDown={handleKeyPress}
-//                         onBlur={handleUpdate}
-//                         autoFocus
-//                         className="task-edit-field"
-//                     />
-//                 ) : (
-//                     <div>
-//                         <p
-//                             onClick={() => setIsEditing(true)}
-//                             className={`task-title-text ${todo.completed ? 'completed' : ''}`}
-//                         >
-//                             {todo.text}
-//                         </p>
-//                         <div className="task-metadata">
-//                             <span className="task-created-date">
-//                                 {new Date(todo.createdAt).toLocaleDateString()}
-//                             </span>
-//                             <span className={`task-priority-label ${getPriorityClass(todo.priority)}`}>
-//                                 {todo.priority}
-//                             </span>
-//                         </div>
-//                     </div>
-//                 )}
-//             </div>
-
-//             {/* Delete Button */}
-//             <button
-//                 onClick={() => onDelete(todo.id)}
-//                 className="task-remove-button"
-//             >
-//                 🗑️
-//             </button>
-//         </div>
-//     );
-// };
-
-// export default Todo;
-
-// import React, { useState, useEffect } from 'react';
-// import './Todo.css';
-// import Sidebar from '../sidebar/Sidebar';
-
-// const API_BASE_URL = 'http://localhost:8000/api';
-
-// const Todo = () => {
-//     const [todos, setTodos] = useState([]);
-//     const [newTodo, setNewTodo] = useState('');
-//     const [filter, setFilter] = useState('all');
-//     const [searchTerm, setSearchTerm] = useState('');
-//     const [selectedPriority, setSelectedPriority] = useState('medium');
-//     const [loading, setLoading] = useState(true);
-//     const [error, setError] = useState(null);
-
-//     // For demonstration, using user_id = 1
-//     // In a real app, you'd get this from authentication
-//     const userId = 1;
-
-//     // Fetch todos from backend
-//     const fetchTodos = async () => {
-//         try {
-//             setLoading(true);
-//             const response = await fetch(`${API_BASE_URL}/todos/${userId}`);
-//             if (response.ok) {
-//                 const data = await response.json();
-//                 // Transform backend data to match frontend format
-//                 const transformedTodos = data.map(todo => ({
-//                     id: todo.id,
-//                     text: todo.text,
-//                     completed: todo.completed,
-//                     priority: todo.priority,
-//                     createdAt: todo.created_at
-//                 }));
-//                 setTodos(transformedTodos);
-//                 setError(null);
-//             } else {
-//                 setError('Failed to fetch todos');
-//             }
-//         } catch (err) {
-//             setError('Error connecting to server');
-//             console.error('Error fetching todos:', err);
-//         } finally {
-//             setLoading(false);
-//         }
-//     };
-
-//     // Load todos on component mount
-//     useEffect(() => {
-//         fetchTodos();
-//     }, []);
-
-//     const addTodo = async () => {
-//         if (newTodo.trim() === '') return;
-
-//         try {
-//             const response = await fetch(`${API_BASE_URL}/todos/${userId}`, {
-//                 method: 'POST',
-//                 headers: {
-//                     'Content-Type': 'application/json',
-//                 },
-//                 body: JSON.stringify({
-//                     text: newTodo.trim(),
-//                     priority: selectedPriority
-//                 })
-//             });
-
-//             if (response.ok) {
-//                 const newTodoFromServer = await response.json();
-//                 const transformedTodo = {
-//                     id: newTodoFromServer.id,
-//                     text: newTodoFromServer.text,
-//                     completed: newTodoFromServer.completed,
-//                     priority: newTodoFromServer.priority,
-//                     createdAt: newTodoFromServer.created_at
-//                 };
-//                 setTodos([transformedTodo, ...todos]);
-//                 setNewTodo('');
-//                 setSelectedPriority('medium');
-//                 setError(null);
-//             } else {
-//                 setError('Failed to add todo');
-//             }
-//         } catch (err) {
-//             setError('Error adding todo');
-//             console.error('Error adding todo:', err);
-//         }
-//     };
-
-//     const toggleTodo = async (id) => {
-//         const todo = todos.find(t => t.id === id);
-//         if (!todo) return;
-
-//         try {
-//             const response = await fetch(`${API_BASE_URL}/todos/${id}`, {
-//                 method: 'PUT',
-//                 headers: {
-//                     'Content-Type': 'application/json',
-//                 },
-//                 body: JSON.stringify({
-//                     completed: !todo.completed
-//                 })
-//             });
-
-//             if (response.ok) {
-//                 setTodos(todos.map(todo =>
-//                     todo.id === id ? { ...todo, completed: !todo.completed } : todo
-//                 ));
-//                 setError(null);
-//             } else {
-//                 setError('Failed to update todo');
-//             }
-//         } catch (err) {
-//             setError('Error updating todo');
-//             console.error('Error updating todo:', err);
-//         }
-//     };
-
-//     const deleteTodo = async (id) => {
-//         try {
-//             const response = await fetch(`${API_BASE_URL}/todos/${id}`, {
-//                 method: 'DELETE'
-//             });
-
-//             if (response.ok) {
-//                 setTodos(todos.filter(todo => todo.id !== id));
-//                 setError(null);
-//             } else {
-//                 setError('Failed to delete todo');
-//             }
-//         } catch (err) {
-//             setError('Error deleting todo');
-//             console.error('Error deleting todo:', err);
-//         }
-//     };
-
-//     const updateTodo = async (id, newText) => {
-//         try {
-//             const response = await fetch(`${API_BASE_URL}/todos/${id}`, {
-//                 method: 'PUT',
-//                 headers: {
-//                     'Content-Type': 'application/json',
-//                 },
-//                 body: JSON.stringify({
-//                     text: newText
-//                 })
-//             });
-
-//             if (response.ok) {
-//                 setTodos(todos.map(todo =>
-//                     todo.id === id ? { ...todo, text: newText } : todo
-//                 ));
-//                 setError(null);
-//             } else {
-//                 setError('Failed to update todo');
-//             }
-//         } catch (err) {
-//             setError('Error updating todo');
-//             console.error('Error updating todo:', err);
-//         }
-//     };
-
-//     const filteredTodos = todos.filter(todo => {
-//         const matchesSearch = todo.text.toLowerCase().includes(searchTerm.toLowerCase());
-//         const matchesFilter = 
-//             filter === 'all' ||
-//             (filter === 'active' && !todo.completed) ||
-//             (filter === 'completed' && todo.completed);
-
-//         return matchesSearch && matchesFilter;
-//     });
-
-//     const completedCount = todos.filter(todo => todo.completed).length;
-//     const activeCount = todos.filter(todo => !todo.completed).length;
-
-//     const handleKeyPress = (e) => {
-//         if (e.key === 'Enter') {
-//             addTodo();
-//         }
-//     };
-
-//     // Clear error after 5 seconds
-//     useEffect(() => {
-//         if (error) {
-//             const timer = setTimeout(() => setError(null), 5000);
-//             return () => clearTimeout(timer);
-//         }
-//     }, [error]);
-
-//     return (
-//         <div className="app-container-todo">
-//             <Sidebar />
-//             <div className="main-content-todo">
-//                 {/* Error Message */}
-//                 {error && (
-//                     <div className="error-message">
-//                         <span>⚠️ {error}</span>
-//                         <button onClick={() => setError(null)}>×</button>
-//                     </div>
-//                 )}
-
-//                 {/* Loading State */}
-//                 {loading && (
-//                     <div className="loading-message">
-//                         <span>Loading todos...</span>
-//                     </div>
-//                 )}
-
-//                 {/* Header */}
-//                 <div className="todo-page-header">
-//                     <h1 className="todo-page-title">Todo List</h1>
-//                     <div className="todo-page-stats">
-//                         <div className="todo-stat-badge">
-//                             Active: {activeCount}
-//                         </div>
-//                         <div className="todo-stat-badge">
-//                             Completed: {completedCount}
-//                         </div>
-//                     </div>
-//                 </div>
-
-//                 {/* Add Todo Section */}
-//                 <div className="todo-creation-section">
-//                     <h3 className="todo-creation-title">Add New Task</h3>
-
-//                     <div className="todo-creation-form">
-//                         <input
-//                             type="text"
-//                             value={newTodo}
-//                             onChange={(e) => setNewTodo(e.target.value)}
-//                             onKeyPress={handleKeyPress}
-//                             placeholder="What needs to be done?"
-//                             className="todo-text-input"
-//                             disabled={loading}
-//                         />
-
-//                         <select
-//                             value={selectedPriority}
-//                             onChange={(e) => setSelectedPriority(e.target.value)}
-//                             className="todo-priority-selector"
-//                             disabled={loading}
-//                         >
-//                             <option value="low">🟢 Low</option>
-//                             <option value="medium">🟡 Medium</option>
-//                             <option value="high">🔴 High</option>
-//                         </select>
-
-//                         <button 
-//                             onClick={addTodo} 
-//                             className="todo-add-button"
-//                             disabled={loading}
-//                         >
-//                             Add Task
-//                         </button>
-//                     </div>
-//                 </div>
-
-//                 {/* Filters */}
-//                 <div className="todo-filter-section">
-//                     <input
-//                         type="text"
-//                         value={searchTerm}
-//                         onChange={(e) => setSearchTerm(e.target.value)}
-//                         placeholder="Search tasks..."
-//                         className="todo-search-field"
-//                     />
-
-//                     <div className="todo-filter-buttons">
-//                         {['all', 'active', 'completed'].map((filterType) => (
-//                             <button
-//                                 key={filterType}
-//                                 onClick={() => setFilter(filterType)}
-//                                 className={`todo-filter-button ${filter === filterType ? 'active' : ''}`}
-//                             >
-//                                 {filterType}
-//                             </button>
-//                         ))}
-//                     </div>
-//                 </div>
-
-//                 {/* Todo List */}
-//                 <div className="todo-items-container">
-//                     {filteredTodos.length === 0 && !loading ? (
-//                         <div className="todo-empty-message">
-//                             <h3 className="todo-empty-title">
-//                                 {todos.length === 0 ? 'No tasks yet' : 'No matching tasks'}
-//                             </h3>
-//                             <p className="todo-empty-description">
-//                                 {todos.length === 0 
-//                                     ? 'Add your first task to get started!' 
-//                                     : 'Try adjusting your search or filter.'}
-//                             </p>
-//                         </div>
-//                     ) : (
-//                         filteredTodos.map((todo) => (
-//                             <TaskCard
-//                                 key={todo.id}
-//                                 todo={todo}
-//                                 onToggle={toggleTodo}
-//                                 onDelete={deleteTodo}
-//                                 onUpdate={updateTodo}
-//                             />
-//                         ))
-//                     )}
-//                 </div>
-//             </div>
-//         </div>
-//     );
-// };
-
-// const TaskCard = ({ todo, onToggle, onDelete, onUpdate }) => {
-//     const [isEditing, setIsEditing] = useState(false);
-//     const [editText, setEditText] = useState(todo.text);
-
-//     const getPriorityEmoji = (priority) => {
-//         switch (priority) {
-//             case 'high': return '🔴';
-//             case 'medium': return '🟡';
-//             case 'low': return '🟢';
-//             default: return '⚪';
-//         }
-//     };
-
-//     const getPriorityClass = (priority) => {
-//         switch (priority) {
-//             case 'high': return 'task-priority-high';
-//             case 'medium': return 'task-priority-medium';
-//             case 'low': return 'task-priority-low';
-//             default: return '';
-//         }
-//     };
-
-//     const handleUpdate = () => {
-//         if (editText.trim() !== '' && editText.trim() !== todo.text) {
-//             onUpdate(todo.id, editText.trim());
-//         }
-//         setIsEditing(false);
-//     };
-
-//     const handleKeyPress = (e) => {
-//         if (e.key === 'Enter') {
-//             handleUpdate();
-//         }
-//         if (e.key === 'Escape') {
-//             setEditText(todo.text);
-//             setIsEditing(false);
-//         }
-//     };
-
-//     return (
-//         <div className="task-card">
-//             {/* Checkbox */}
-//             <button
-//                 onClick={() => onToggle(todo.id)}
-//                 className={`task-complete-button ${todo.completed ? 'completed' : ''}`}
-//             >
-//                 {todo.completed && '✓'}
-//             </button>
-
-//             {/* Priority Indicator */}
-//             <span className="task-priority-icon">
-//                 {getPriorityEmoji(todo.priority)}
-//             </span>
-
-//             {/* Task Content */}
-//             <div className="task-content-area">
-//                 {isEditing ? (
-//                     <input
-//                         type="text"
-//                         value={editText}
-//                         onChange={(e) => setEditText(e.target.value)}
-//                         onKeyDown={handleKeyPress}
-//                         onBlur={handleUpdate}
-//                         autoFocus
-//                         className="task-edit-field"
-//                     />
-//                 ) : (
-//                     <div>
-//                         <p
-//                             onClick={() => setIsEditing(true)}
-//                             className={`task-title-text ${todo.completed ? 'completed' : ''}`}
-//                         >
-//                             {todo.text}
-//                         </p>
-//                         <div className="task-metadata">
-//                             <span className="task-created-date">
-//                                 {new Date(todo.createdAt).toLocaleDateString()}
-//                             </span>
-//                             <span className={`task-priority-label ${getPriorityClass(todo.priority)}`}>
-//                                 {todo.priority}
-//                             </span>
-//                         </div>
-//                     </div>
-//                 )}
-//             </div>
-
-//             {/* Delete Button */}
-//             <button
-//                 onClick={() => onDelete(todo.id)}
-//                 className="task-remove-button"
-//             >
-//                 🗑️
-//             </button>
-//         </div>
-//     );
-// };
-
-// export default Todo;
-
 import React, { useState, useEffect } from 'react';
 import './Todo.css';
 import Sidebar from '../sidebar/Sidebar';
+import { getUserId } from '../utils/userUtils'; // Import helper
 
 const API_BASE_URL = 'http://localhost:8000/api';
 
@@ -696,47 +14,44 @@ const Todo = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [deleteConfirmation, setDeleteConfirmation] = useState(null);
-    
-    // For demonstration, using user_id = 1
-    // In a real app, you'd get this from authentication
-    const userId = 1;
+
+    // Get user ID from localStorage instead of hardcoded value
+    const userId = getUserId();
 
     // Fetch todos from backend
-    const fetchTodos = async () => {
-        try {
-            setLoading(true);
-            const response = await fetch(`${API_BASE_URL}/todos/${userId}`);
-            if (response.ok) {
-                const data = await response.json();
-                // Transform backend data to match frontend format
-                const transformedTodos = data.map(todo => ({
-                    id: todo.id,
-                    text: todo.text,
-                    completed: todo.completed,
-                    priority: todo.priority,
-                    createdAt: todo.created_at
-                }));
-                setTodos(transformedTodos);
-                setError(null);
-            } else {
-                setError('Failed to fetch todos');
-            }
-        } catch (err) {
-            setError('Error connecting to server');
-            console.error('Error fetching todos:', err);
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    // Load todos on component mount
     useEffect(() => {
+        const fetchTodos = async () => {
+            try {
+                setLoading(true);
+                const response = await fetch(`${API_BASE_URL}/todos/${userId}`);
+                if (response.ok) {
+                    const data = await response.json();
+                    const transformedTodos = data.map(todo => ({
+                        id: todo.id,
+                        text: todo.text,
+                        completed: todo.completed,
+                        priority: todo.priority,
+                        createdAt: todo.created_at
+                    }));
+                    setTodos(transformedTodos);
+                    setError(null);
+                } else {
+                    setError('Failed to fetch todos');
+                }
+            } catch (err) {
+                setError('Error connecting to server');
+                console.error('Error fetching todos:', err);
+            } finally {
+                setLoading(false);
+            }
+        };
+
         fetchTodos();
-    }, []);
+    }, [userId]);
 
     const addTodo = async () => {
         if (newTodo.trim() === '') return;
-        
+
         try {
             const response = await fetch(`${API_BASE_URL}/todos/${userId}`, {
                 method: 'POST',
@@ -809,7 +124,7 @@ const Todo = () => {
             if (response.ok) {
                 setTodos(todos.filter(todo => todo.id !== id));
                 setError(null);
-                setDeleteConfirmation(null); // Close confirmation modal
+                setDeleteConfirmation(null);
             } else {
                 setError('Failed to delete todo');
             }
@@ -819,7 +134,6 @@ const Todo = () => {
         }
     };
 
-    // Delete confirmation handlers
     const handleDeleteRequest = (todo) => {
         setDeleteConfirmation(todo);
     };
@@ -863,11 +177,11 @@ const Todo = () => {
 
     const filteredTodos = todos.filter(todo => {
         const matchesSearch = todo.text.toLowerCase().includes(searchTerm.toLowerCase());
-        const matchesFilter = 
+        const matchesFilter =
             filter === 'all' ||
             (filter === 'active' && !todo.completed) ||
             (filter === 'completed' && todo.completed);
-        
+
         return matchesSearch && matchesFilter;
     });
 
@@ -880,7 +194,6 @@ const Todo = () => {
         }
     };
 
-    // Clear error after 5 seconds
     useEffect(() => {
         if (error) {
             const timer = setTimeout(() => setError(null), 5000);
@@ -892,7 +205,6 @@ const Todo = () => {
         <div className="app-container-todo">
             <Sidebar />
             <div className="main-content-todo">
-                {/* Error Message */}
                 {error && (
                     <div className="error-message">
                         <span>⚠️ {error}</span>
@@ -900,16 +212,14 @@ const Todo = () => {
                     </div>
                 )}
 
-                {/* Loading State */}
                 {loading && (
                     <div className="loading-message">
                         <span>Loading todos...</span>
                     </div>
                 )}
 
-                {/* Header */}
                 <div className="todo-page-header">
-                    <h1 className="todo-page-title">Todo List</h1>
+                    <h1 className="todo-page-title">To-Do List</h1>
                     <div className="todo-page-stats">
                         <div className="todo-stat-badge">
                             Active: {activeCount}
@@ -920,10 +230,9 @@ const Todo = () => {
                     </div>
                 </div>
 
-                {/* Add Todo Section */}
                 <div className="todo-creation-section">
                     <h3 className="todo-creation-title">Add New Task</h3>
-                    
+
                     <div className="todo-creation-form">
                         <input
                             type="text"
@@ -934,7 +243,7 @@ const Todo = () => {
                             className="todo-text-input"
                             disabled={loading}
                         />
-                        
+
                         <select
                             value={selectedPriority}
                             onChange={(e) => setSelectedPriority(e.target.value)}
@@ -945,9 +254,9 @@ const Todo = () => {
                             <option value="medium">🟡 Medium</option>
                             <option value="high">🔴 High</option>
                         </select>
-                        
-                        <button 
-                            onClick={addTodo} 
+
+                        <button
+                            onClick={addTodo}
                             className="todo-add-button"
                             disabled={loading}
                         >
@@ -956,7 +265,6 @@ const Todo = () => {
                     </div>
                 </div>
 
-                {/* Filters */}
                 <div className="todo-filter-section">
                     <input
                         type="text"
@@ -965,7 +273,7 @@ const Todo = () => {
                         placeholder="Search tasks..."
                         className="todo-search-field"
                     />
-                    
+
                     <div className="todo-filter-buttons">
                         {['all', 'active', 'completed'].map((filterType) => (
                             <button
@@ -979,7 +287,6 @@ const Todo = () => {
                     </div>
                 </div>
 
-                {/* Todo List */}
                 <div className="todo-items-container">
                     {filteredTodos.length === 0 && !loading ? (
                         <div className="todo-empty-message">
@@ -987,8 +294,8 @@ const Todo = () => {
                                 {todos.length === 0 ? 'No tasks yet' : 'No matching tasks'}
                             </h3>
                             <p className="todo-empty-description">
-                                {todos.length === 0 
-                                    ? 'Add your first task to get started!' 
+                                {todos.length === 0
+                                    ? 'Add your first task to get started!'
                                     : 'Try adjusting your search or filter.'}
                             </p>
                         </div>
@@ -1006,27 +313,26 @@ const Todo = () => {
                 </div>
             </div>
 
-            {/* Delete Confirmation Modal */}
             {deleteConfirmation && (
                 <div className="delete-confirmation-overlay">
                     <div className="delete-confirmation-modal">
                         <div className="delete-confirmation-body">
                             <div className="delete-confirmation-icon">
                                 <svg width="48" height="48" viewBox="0 0 24 24" fill="none">
-                                    <path d="M12 9V13M12 17H12.01M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="#EF4444" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                                    <path d="M12 9V13M12 17H12.01M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="#EF4444" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                                 </svg>
                             </div>
-                            
+
                             <div className="delete-modal-content">
                                 <h3>Delete Task</h3>
                                 <p>Are you sure you want to delete <strong>{deleteConfirmation.text.length > 30 ? deleteConfirmation.text.substring(0, 30) + '...' : deleteConfirmation.text}</strong></p>
                                 <p className="delete-warning">This action cannot be undone. Your task will be permanently removed.</p>
-                                
+
                                 <div className="task-preview-modal">
                                     <div className="preview-header">
                                         <span className="preview-priority">
-                                            {deleteConfirmation.priority === 'high' ? '🔴' : 
-                                             deleteConfirmation.priority === 'medium' ? '🟡' : '🟢'} 
+                                            {deleteConfirmation.priority === 'high' ? '🔴' :
+                                                deleteConfirmation.priority === 'medium' ? '🟡' : '🟢'}
                                             {deleteConfirmation.priority}
                                         </span>
                                         <span className="preview-date">
@@ -1042,17 +348,17 @@ const Todo = () => {
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div className="delete-modal-actions">
-                            <button 
-                                className="modal-cancel-btn" 
+                            <button
+                                className="modal-cancel-btn"
                                 onClick={handleCancelDelete}
                                 disabled={loading}
                             >
                                 Cancel
                             </button>
-                            <button 
-                                className="modal-delete-btn" 
+                            <button
+                                className="modal-delete-btn"
                                 onClick={handleConfirmDelete}
                                 disabled={loading}
                             >
@@ -1064,10 +370,10 @@ const Todo = () => {
                                 ) : (
                                     <>
                                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                                            <path d="M3 6H5H21" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-                                            <path d="M8 6V4C8 3.46957 8.21071 2.96086 8.58579 2.58579C8.96086 2.21071 9.46957 2 10 2H14C14.5304 2 15.0391 2.21071 15.4142 2.58579C15.7893 2.96086 16 3.46957 16 4V6M19 6V20C19 20.5304 18.7893 21.0391 18.4142 21.4142C18.0391 21.7893 17.5304 22 17 22H7C6.46957 22 5.96086 21.7893 5.58579 21.4142C5.21071 21.0391 5 20.5304 5 20V6H19Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-                                            <path d="M10 11V17" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-                                            <path d="M14 11V17" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                                            <path d="M3 6H5H21" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+                                            <path d="M8 6V4C8 3.46957 8.21071 2.96086 8.58579 2.58579C8.96086 2.21071 9.46957 2 10 2H14C14.5304 2 15.0391 2.21071 15.4142 2.58579C15.7893 2.96086 16 3.46957 16 4V6M19 6V20C19 20.5304 18.7893 21.0391 18.4142 21.4142C18.0391 21.7893 17.5304 22 17 22H7C6.46957 22 5.96086 21.7893 5.58579 21.4142C5.21071 21.0391 5 20.5304 5 20V6H19Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+                                            <path d="M10 11V17" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+                                            <path d="M14 11V17" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
                                         </svg>
                                         Delete Task
                                     </>
@@ -1113,7 +419,7 @@ const TaskCard = ({ todo, onToggle, onDeleteRequest, onUpdate }) => {
             if (success) {
                 setIsEditingText(false);
             } else {
-                setEditText(todo.text); // Reset on failure
+                setEditText(todo.text);
             }
             setUpdating(false);
         } else {
@@ -1130,7 +436,7 @@ const TaskCard = ({ todo, onToggle, onDeleteRequest, onUpdate }) => {
                 setEditPriority(newPriority);
                 setIsEditingPriority(false);
             } else {
-                setEditPriority(todo.priority); // Reset on failure
+                setEditPriority(todo.priority);
             }
             setUpdating(false);
         } else {
@@ -1160,14 +466,12 @@ const TaskCard = ({ todo, onToggle, onDeleteRequest, onUpdate }) => {
         setEditPriority(todo.priority);
     };
 
-    // Delete request handler
     const handleDeleteClick = () => {
         onDeleteRequest(todo);
     };
 
     return (
         <div className={`task-card ${updating ? 'updating' : ''}`}>
-            {/* Checkbox */}
             <button
                 onClick={() => onToggle(todo.id)}
                 className={`task-complete-button ${todo.completed ? 'completed' : ''}`}
@@ -1176,7 +480,6 @@ const TaskCard = ({ todo, onToggle, onDeleteRequest, onUpdate }) => {
                 {todo.completed && '✓'}
             </button>
 
-            {/* Priority Indicator - Clickable for editing */}
             <div className="task-priority-container">
                 {isEditingPriority ? (
                     <select
@@ -1205,7 +508,6 @@ const TaskCard = ({ todo, onToggle, onDeleteRequest, onUpdate }) => {
                 )}
             </div>
 
-            {/* Task Content */}
             <div className="task-content-area">
                 {isEditingText ? (
                     <input
@@ -1235,7 +537,6 @@ const TaskCard = ({ todo, onToggle, onDeleteRequest, onUpdate }) => {
                 )}
             </div>
 
-            {/* Action Buttons */}
             <div className="task-actions">
                 {!isEditingText && !isEditingPriority && (
                     <>
@@ -1246,7 +547,7 @@ const TaskCard = ({ todo, onToggle, onDeleteRequest, onUpdate }) => {
                             disabled={updating || todo.completed}
                         >
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                             </svg>
                         </button>
                         <button
@@ -1256,14 +557,13 @@ const TaskCard = ({ todo, onToggle, onDeleteRequest, onUpdate }) => {
                             disabled={updating}
                         >
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                             </svg>
                         </button>
                     </>
                 )}
             </div>
 
-            {/* Loading indicator for individual updates */}
             {updating && (
                 <div className="task-updating-indicator">
                     <div className="updating-spinner"></div>

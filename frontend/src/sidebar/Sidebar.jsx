@@ -1,12 +1,11 @@
 import React from "react";
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import './Sidebar.css';
 import { FaUserCircle } from "react-icons/fa";
+import { logout } from '../utils/userUtils'; // Import the logout function
 
 const Sidebar = () => {
-
     const location = useLocation();
-    const navigate = useNavigate();
 
     const pathToTab = {
         '/homepage': 'Homepage',
@@ -16,22 +15,17 @@ const Sidebar = () => {
         '/pomodoro': 'Pomodoro',
         '/calendar': 'Calendar',
         '/dashboard': 'Dashboard',
-        '/trash': 'Trash',
     }
 
     const activeTab = pathToTab[location.pathname] || '';
 
-    // Logout function inside Sidebar
-    const logout = () => {
-        // Clear auth tokens (adjust as needed)
-        localStorage.removeItem("authToken");
-        // Redirect to login page
-        navigate("/");
+    // Updated logout function using the utility
+    const handleLogout = () => {
+        logout(); // This will clear localStorage and redirect to login
     };
 
     return (
         <div className="sidebar">
-
             <Link to="/profile" className={`profile-section ${activeTab === "Profile" ? "active" : ""}`}>
                 <FaUserCircle size={24} className="icon" />
                 <span className="label">Profile</span>
@@ -75,12 +69,7 @@ const Sidebar = () => {
 
                 <hr className="nav-separator" />
 
-                <Link to="/trash" className={activeTab === "Trash" ? "active" : ""}>
-                    <span className="icon">🗑️</span>
-                    <span className="label">Trash</span>
-                </Link>
-
-                <button className="logout-button" onClick={logout}>
+                <button className="logout-button" onClick={handleLogout}>
                     <span className="icon">🚪</span>
                     <span className="label">Logout</span>
                 </button>

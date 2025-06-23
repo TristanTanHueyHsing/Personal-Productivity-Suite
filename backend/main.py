@@ -338,8 +338,8 @@ from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 from fastapi.exception_handlers import request_validation_exception_handler
 from app.database.connection import Base, engine
-from app.models import user, notes, todo, journal  # ADD note import here
-from app.routes import user as user_routes, notes as note_routes, todo as todo_routes, journal as journal_routes  # ADD note_routes import
+from app.models import user, notes, todo, journal, pomodoro
+from app.routes import user as user_routes, notes as note_routes, todo as todo_routes, journal as journal_routes, profile as profile_routes, pomodoro as pomodoro_routes
 
 # Create DB tables
 Base.metadata.create_all(bind=engine)
@@ -356,10 +356,12 @@ app.add_middleware(
 )
 
 # Include routes
-app.include_router(user_routes.router, tags=["users"])  # Add prefix and tags
-app.include_router(note_routes.router, prefix="/api", tags=["notes"])  # ADD this line
-app.include_router(todo_routes.router, prefix="/api", tags=["todos"])  # ADD this line
+app.include_router(user_routes.router, tags=["users"])
+app.include_router(note_routes.router, prefix="/api", tags=["notes"])
+app.include_router(todo_routes.router, prefix="/api", tags=["todos"])
 app.include_router(journal_routes.router, prefix="/api", tags=["journals"])
+app.include_router(profile_routes.router, prefix="/api", tags=["profile"]) 
+app.include_router(pomodoro_routes.router, prefix="/api", tags=["pomodoro"]) 
 
 # Custom validation handler
 @app.exception_handler(RequestValidationError)

@@ -12,3 +12,4 @@ class User(Base):
     notes = relationship("Note", back_populates="user")
     todos = relationship("Todo", back_populates="user")
     journals = relationship("Journal", back_populates="user")
+    pomodoro_sessions = relationship("PomodoroSession", back_populates="user")

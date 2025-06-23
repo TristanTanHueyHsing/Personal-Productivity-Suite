@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Bungee&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
 /* Homepage Container */
 .app-container-homepage {
@@ -21,72 +21,15 @@
 
 /* Hide scrollbar */
 .main-content-homepage {
-    scrollbar-width: none; /* Firefox */
-    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none;
+    -ms-overflow-style: none;
 }
 
 .main-content-homepage::-webkit-scrollbar {
-    display: none; /* Chrome, Safari, Opera */
+    display: none;
 }
 
-/* Section Wrappers */
-.section-wrapper {
-    margin-bottom: 32px;
-}
-
-.section-header {
-    background-color: transparent !important;
-    font-size: 14px;
-    color: #64748B;
-    margin-left: 4px;
-    margin-bottom: 12px;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    font-weight: 600;
-    border-bottom: 1px solid rgba(71, 85, 105, 0.3);
-    padding-bottom: 8px;
-    width: fit-content;
-}
-
-/* Card Base Styles */
-.homepage-card {
-    background: transparent;
-    border-radius: 20px;
-    padding: 28px;
-    margin-bottom: 24px;
-    border: 1px solid rgba(71, 85, 105, 0.3);
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    opacity: 0;
-    transform: translateY(20px);
-}
-
-.homepage-card:hover {
-    transform: translateY(-2px);
-    border-color: rgba(71, 85, 105, 0.5);
-}
-
-.snapshot-animated {
-    opacity: 1;
-    transform: translateY(0);
-}
-
-/* Stagger animation delays */
-.homepage-card:nth-child(1) { transition-delay: 0.1s; }
-.homepage-card:nth-child(2) { transition-delay: 0.2s; }
-.homepage-card:nth-child(3) { transition-delay: 0.3s; }
-.homepage-card:nth-child(4) { transition-delay: 0.4s; }
-.homepage-card:nth-child(5) { transition-delay: 0.5s; }
-.homepage-card:nth-child(6) { transition-delay: 0.6s; }
-
-.card-title {
-    font-size: 20px;
-    font-weight: 600;
-    color: #CBD5E1;
-    margin: 0 0 20px 0;
-    letter-spacing: -0.025em;
-}
-
-/* Greeting Card */
+/* Greeting Card - Keep Original */
 .greeting-card {
     background: linear-gradient(135deg, rgba(30, 41, 59, 0.4) 0%, rgba(30, 41, 59, 0.2) 100%);
     border: 1px solid rgba(64, 224, 208, 0.2);
@@ -95,6 +38,9 @@
     overflow: hidden;
     backdrop-filter: blur(10px);
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+    border-radius: 20px;
+    padding: 32px;
+    margin-bottom: 40px;
 }
 
 .greeting-card::before {
@@ -124,10 +70,10 @@
 }
 
 .greeting-title {
-    font-size: 36px;
+    font-size: 42px;
     font-weight: 700;
     color: #E5E7EB;
-    margin: 0 0 12px 0;
+    margin: 0 0 16px 0;
     background: linear-gradient(135deg, #E5E7EB 0%, #40E0D0 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -135,18 +81,18 @@
 }
 
 .greeting-date {
-    font-size: 18px;
+    font-size: 20px;
     color: #94A3B8;
-    margin: 0 0 20px 0;
+    margin: 0 0 24px 0;
     font-weight: 500;
 }
 
 .daily-quote {
-    font-size: 16px;
+    font-size: 18px;
     font-style: italic;
     color: #CBD5E1;
     margin: 0;
-    padding: 16px 0;
+    padding: 20px 0;
     border-top: 1px solid rgba(71, 85, 105, 0.3);
     position: relative;
 }
@@ -154,519 +100,430 @@
 .daily-quote::before,
 .daily-quote::after {
     content: '"';
-    font-size: 24px;
+    font-size: 28px;
     color: #40E0D0;
     font-weight: 700;
 }
 
-/* Focus Card */
-.focus-card {
-    border-left: 4px solid #40E0D0;
-    background: transparent;
-}
-
-.focus-input {
-    width: 100%;
-    min-height: 48px;
-    resize: none;
-    overflow: hidden;
-    padding: 16px;
-    margin-top: 16px;
-    background: rgba(30, 41, 59, 0.4);
-    color: #E5E7EB;
-    border: 1px solid rgba(71, 85, 105, 0.3);
-    border-radius: 12px;
-    font-size: 16px;
-    line-height: 1.5;
-    outline: none;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    box-sizing: border-box;
-    backdrop-filter: blur(10px);
-    font-family: inherit;
-}
-
-.focus-input::placeholder {
-    color: #94A3B8;
-}
-
-.focus-input:focus {
-    border-color: #40E0D0;
-    background: rgba(30, 41, 59, 0.6);
-    box-shadow: 0 0 0 3px rgba(64, 224, 208, 0.1);
-}
-
-/* Snapshot Card */
-.snapshot-card {
-    border-left: 4px solid #8B5CF6;
-    background: transparent;
-}
-
-.snapshot-grid {
+/* Information Container */
+.info-container {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(2, 1fr);
     gap: 24px;
-    margin-top: 20px;
+    max-width: 1400px;
 }
 
-.snapshot-block {
-    background: rgba(30, 41, 59, 0.4);
+/* Information Sections */
+.info-section {
+    background: rgba(15, 23, 42, 0.6);
     border-radius: 16px;
-    padding: 20px;
-    border: 1px solid rgba(71, 85, 105, 0.3);
-    transition: all 0.3s ease;
+    padding: 24px;
+    border: 1px solid rgba(71, 85, 105, 0.2);
+    transition: all 0.4s ease;
+    backdrop-filter: blur(20px);
+    position: relative;
 }
 
-.snapshot-block:hover {
-    background: rgba(30, 41, 59, 0.6);
-    transform: translateY(-1px);
+.info-section:hover {
+    transform: translateY(-4px);
+    border-color: rgba(71, 85, 105, 0.4);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
 }
 
-.snapshot-title {
-    font-size: 16px;
+.section-title {
+    font-size: 18px;
     font-weight: 600;
-    color: #CBD5E1;
-    margin: 0 0 16px 0;
+    color: #F1F5F9;
+    margin: 0 0 20px 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 
-.snapshot-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-.snapshot-item {
-    position: relative;
-    padding-left: 24px;
-    margin-bottom: 12px;
-    font-size: 14px;
-    color: #94A3B8;
-    line-height: 1.5;
-}
-
-.snapshot-item:last-child {
-    margin-bottom: 0;
-}
-
-.snapshot-item::before {
-    content: "•";
-    position: absolute;
-    left: 0;
-    top: 0;
-    font-size: 16px;
-    font-weight: bold;
-}
-
-.todo-item::before {
-    color: #22D3EE;
-}
-
-.journal-item::before {
-    color: #8B5CF6;
-}
-
-.snapshot-item.overdue {
-    color: #EF4444;
-}
-
-/* Pomodoro Card */
-.pomodoro-card {
-    border-left: 4px solid #F59E0B;
-    background: transparent;
-}
-
-.pomodoro-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-.pomodoro-item {
-    position: relative;
-    padding-left: 32px;
-    margin-bottom: 16px;
-    font-size: 16px;
-    color: #94A3B8;
-    line-height: 1.5;
-    transition: color 0.3s ease;
-}
-
-.pomodoro-item:last-child {
-    margin-bottom: 0;
-}
-
-.pomodoro-item::before {
-    content: "•";
-    position: absolute;
-    left: 0;
-    top: 0;
-    font-size: 20px;
-    color: #F59E0B;
-    font-weight: bold;
-}
-
-.pomodoro-item:hover {
-    color: #E5E7EB;
-}
-
-.break-mode {
-    color: #40E0D0 !important;
-    font-weight: 500;
-}
-
-/* Activity Card */
-.activity-card {
-    border-left: 4px solid #F87171;
-    background: transparent;
-}
-
-.activity-feed {
+/* Productivity Tips */
+.tips-list {
     display: flex;
     flex-direction: column;
     gap: 16px;
-    margin-top: 24px;
 }
 
-.activity-feed-item {
+.tip-item {
     display: flex;
-    align-items: flex-start;
     gap: 16px;
     padding: 16px;
     background: rgba(30, 41, 59, 0.4);
     border-radius: 12px;
     border: 1px solid rgba(71, 85, 105, 0.3);
     transition: all 0.3s ease;
-    position: relative;
 }
 
-.activity-feed-item:hover {
+.tip-item:hover {
     background: rgba(30, 41, 59, 0.6);
-    transform: translateY(-1px);
-    border-color: rgba(71, 85, 105, 0.5);
+    transform: translateX(4px);
 }
 
-.activity-feed-icon {
-    width: 48px;
-    height: 48px;
-    border-radius: 12px;
+.tip-number {
+    font-size: 20px;
+    font-weight: 700;
+    color: #40E0D0;
+    min-width: 30px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 20px;
-    background: rgba(30, 41, 59, 0.6);
+    background: rgba(64, 224, 208, 0.1);
+    border-radius: 8px;
+    height: 30px;
+}
+
+.tip-content h4 {
+    font-size: 14px;
+    font-weight: 600;
+    color: #E5E7EB;
+    margin: 0 0 6px 0;
+}
+
+.tip-content p {
+    font-size: 13px;
+    color: #94A3B8;
+    margin: 0;
+    line-height: 1.4;
+}
+
+/* Mindfulness Section */
+.mindfulness-content {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.breathing-exercise {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    padding: 20px;
+    background: rgba(30, 41, 59, 0.4);
+    border-radius: 12px;
     border: 1px solid rgba(71, 85, 105, 0.3);
+}
+
+.breathing-circle {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 60px;
+    height: 60px;
     flex-shrink: 0;
+}
+
+.circle-inner {
+    width: 40px;
+    height: 40px;
+    border: 2px solid #8B5CF6;
+    border-radius: 50%;
+    background: rgba(139, 92, 246, 0.1);
+}
+
+.breathing-text h4 {
+    font-size: 14px;
+    font-weight: 600;
+    color: #E5E7EB;
+    margin: 0 0 6px 0;
+}
+
+.breathing-text p {
+    font-size: 13px;
+    color: #94A3B8;
+    margin: 0;
+    line-height: 1.4;
+}
+
+.mindfulness-tips {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.mindful-tip {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    background: rgba(30, 41, 59, 0.3);
+    border-radius: 10px;
+    border: 1px solid rgba(71, 85, 105, 0.2);
     transition: all 0.3s ease;
 }
 
-.activity-feed-item:hover .activity-feed-icon {
-    transform: scale(1.05);
+.mindful-tip:hover {
+    background: rgba(30, 41, 59, 0.5);
+    transform: translateX(4px);
 }
 
-.notes-activity .activity-feed-icon {
-    background: rgba(59, 130, 246, 0.1);
-    border-color: rgba(59, 130, 246, 0.3);
+.tip-emoji {
+    font-size: 18px;
+    flex-shrink: 0;
 }
 
-.todo-activity .activity-feed-icon {
-    background: rgba(34, 211, 238, 0.1);
-    border-color: rgba(34, 211, 238, 0.3);
-}
-
-.pomodoro-activity .activity-feed-icon {
-    background: rgba(245, 158, 11, 0.1);
-    border-color: rgba(245, 158, 11, 0.3);
-}
-
-.journal-activity .activity-feed-icon {
-    background: rgba(139, 92, 246, 0.1);
-    border-color: rgba(139, 92, 246, 0.3);
-}
-
-.activity-feed-content {
-    flex: 1;
-    min-width: 0;
-}
-
-.activity-feed-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 8px;
-    flex-wrap: wrap;
-    gap: 8px;
-}
-
-.activity-feed-action {
-    font-size: 16px;
-    font-weight: 600;
-    color: #E5E7EB;
-}
-
-.activity-feed-time {
-    font-size: 12px;
-    color: #64748B;
-    font-weight: 500;
-    white-space: nowrap;
-}
-
-.activity-feed-item-name {
-    font-size: 14px;
-    color: #94A3B8;
-    margin-bottom: 8px;
+.tip-text {
+    color: #CBD5E1;
+    font-size: 13px;
     line-height: 1.4;
-    word-break: break-word;
 }
 
-.activity-feed-type {
-    display: inline-block;
-    padding: 4px 8px;
-    background: rgba(30, 41, 59, 0.6);
-    border-radius: 6px;
-    font-size: 10px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    color: #94A3B8;
-    border: 1px solid rgba(71, 85, 105, 0.3);
-}
-
-.notes-activity .activity-feed-type {
-    background: rgba(59, 130, 246, 0.1);
-    color: #3B82F6;
-    border-color: rgba(59, 130, 246, 0.3);
-}
-
-.todo-activity .activity-feed-type {
-    background: rgba(34, 211, 238, 0.1);
-    color: #22D3EE;
-    border-color: rgba(34, 211, 238, 0.3);
-}
-
-.pomodoro-activity .activity-feed-type {
-    background: rgba(245, 158, 11, 0.1);
-    color: #F59E0B;
-    border-color: rgba(245, 158, 11, 0.3);
-}
-
-.journal-activity .activity-feed-type {
-    background: rgba(139, 92, 246, 0.1);
-    color: #8B5CF6;
-    border-color: rgba(139, 92, 246, 0.3);
-}
-
-/* Mood Card */
-.mood-card {
-    border-left: 4px solid #EC4899;
-    background: transparent;
-}
-
-.mood-options {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
+.mindful-reminder {
+    display: flex;
+    align-items: center;
     gap: 12px;
-    margin-top: 20px;
+    padding: 16px;
+    background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(139, 92, 246, 0.05));
+    border-radius: 12px;
+    border: 1px solid rgba(139, 92, 246, 0.2);
+    text-align: center;
+    justify-content: center;
 }
 
-.mood-btn {
-    background: rgba(30, 41, 59, 0.4);
-    border: 1px solid rgba(71, 85, 105, 0.3);
-    border-radius: 12px;
-    padding: 16px;
-    color: #94A3B8;
+.reminder-icon {
+    font-size: 20px;
+}
+
+.reminder-text {
+    color: #CBD5E1;
+    font-style: italic;
     font-size: 14px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    backdrop-filter: blur(10px);
+}
+
+/* Destress Section */
+.destress-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.destress-item {
+    display: flex;
+    gap: 16px;
+    padding: 16px;
+    background: rgba(30, 41, 59, 0.4);
+    border-radius: 12px;
+    border: 1px solid rgba(71, 85, 105, 0.3);
+    transition: all 0.3s ease;
+}
+
+.destress-item:hover {
+    background: rgba(30, 41, 59, 0.6);
+    transform: translateX(4px);
+}
+
+.destress-icon {
+    font-size: 24px;
     display: flex;
     align-items: center;
     justify-content: center;
+    width: 40px;
+    height: 40px;
+    background: rgba(16, 185, 129, 0.1);
+    border-radius: 10px;
+    flex-shrink: 0;
+}
+
+.destress-content h4 {
+    font-size: 14px;
+    font-weight: 600;
+    color: #E5E7EB;
+    margin: 0 0 6px 0;
+}
+
+.destress-content p {
+    font-size: 13px;
+    color: #94A3B8;
+    margin: 0;
+    line-height: 1.4;
+}
+
+/* Positivity Section */
+.positivity-content {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.gratitude-reminder {
+    padding: 20px;
+    background: rgba(30, 41, 59, 0.4);
+    border-radius: 12px;
+    border: 1px solid rgba(71, 85, 105, 0.3);
+    transition: all 0.3s ease;
+}
+
+.gratitude-reminder:hover {
+    background: rgba(30, 41, 59, 0.6);
+}
+
+.gratitude-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+.gratitude-icon {
+    font-size: 20px;
+}
+
+.gratitude-header h4 {
+    font-size: 14px;
+    font-weight: 600;
+    color: #E5E7EB;
+    margin: 0;
+}
+
+.gratitude-reminder p {
+    font-size: 13px;
+    color: #94A3B8;
+    margin: 0;
+    line-height: 1.4;
+}
+
+.positive-affirmations h4 {
+    font-size: 14px;
+    font-weight: 600;
+    color: #E5E7EB;
+    margin: 0 0 16px 0;
+    display: flex;
+    align-items: center;
     gap: 8px;
 }
 
-.mood-btn:hover {
-    background: rgba(30, 41, 59, 0.6);
-    border-color: #40E0D0;
-    transform: translateY(-2px);
-    color: #E5E7EB;
+.affirmations-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
 }
 
-.mood-btn.selected {
-    background: rgba(64, 224, 208, 0.2);
-    border-color: #40E0D0;
-    color: #40E0D0;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 16px rgba(64, 224, 208, 0.2);
-}
-
-.selected-mood {
-    margin-top: 20px;
+.affirmation-card {
     padding: 16px;
-    background: rgba(64, 224, 208, 0.1);
-    border: 1px solid rgba(64, 224, 208, 0.2);
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.1), rgba(245, 158, 11, 0.05));
     border-radius: 12px;
+    border: 1px solid rgba(245, 158, 11, 0.2);
     text-align: center;
+    transition: all 0.3s ease;
 }
 
-.mood-label {
-    color: #94A3B8;
-    font-size: 14px;
-    margin-right: 8px;
+.affirmation-card:hover {
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.15), rgba(245, 158, 11, 0.08));
+    transform: translateY(-2px);
 }
 
-.mood-value {
-    color: #40E0D0;
-    font-size: 16px;
-    font-weight: 600;
+.affirmation-text {
+    color: #E5E7EB;
+    font-size: 13px;
+    font-style: italic;
+    font-weight: 500;
 }
+
+.smile-reminder {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px;
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(16, 185, 129, 0.05));
+    border-radius: 12px;
+    border: 1px solid rgba(16, 185, 129, 0.2);
+    transition: all 0.3s ease;
+}
+
+.smile-reminder:hover {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(16, 185, 129, 0.08));
+}
+
+.smile-icon {
+    font-size: 24px;
+    flex-shrink: 0;
+}
+
+.smile-text {
+    color: #CBD5E1;
+    font-size: 13px;
+    line-height: 1.4;
+}
+
+
+
+/* Animations */
+.fade-in {
+    animation: fadeIn 0.8s ease-out;
+}
+
+.slide-up {
+    animation: slideUp 0.8s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Stagger animation delays */
+.info-section:nth-child(1) { animation-delay: 0.1s; }
+.info-section:nth-child(2) { animation-delay: 0.2s; }
+.info-section:nth-child(3) { animation-delay: 0.3s; }
+.info-section:nth-child(4) { animation-delay: 0.4s; }
+.info-section:nth-child(5) { animation-delay: 0.5s; }
+.info-section:nth-child(6) { animation-delay: 0.6s; }
 
 /* Responsive Design */
 @media (max-width: 768px) {
     .main-content-homepage {
         margin-left: 0;
         padding: 20px;
-        margin: 0.5rem;
-        border-radius: 15px;
     }
     
     .greeting-title {
-        font-size: 28px;
+        font-size: 32px;
     }
     
-    .snapshot-grid {
+    .info-container {
         grid-template-columns: 1fr;
-        gap: 16px;
+        gap: 20px;
     }
     
-    .mood-options {
-        grid-template-columns: 1fr;
-    }
-    
-    .homepage-card {
+    .info-section {
         padding: 20px;
     }
     
-    .section-wrapper {
-        margin-bottom: 24px;
-    }
-    
-    .activity-feed-header {
+    .breathing-exercise {
         flex-direction: column;
-        align-items: flex-start;
-        gap: 4px;
+        text-align: center;
     }
     
-    .activity-feed-time {
-        font-size: 11px;
+    .mindful-tip {
+        justify-content: center;
     }
     
-    .activity-feed-icon {
-        width: 40px;
-        height: 40px;
-        font-size: 16px;
-    }
-}
-
-/* Custom animations */
-@keyframes shimmer {
-    0% { transform: translateX(-100%); }
-    100% { transform: translateX(100%); }
-}
-
-@keyframes pulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.8; }
-}
-
-.greeting-card {
-    animation: pulse 4s ease-in-out infinite;
-}
-
-/* Saved Focus Container */
-.saved-focus-container {
-    margin-top: 16px;
-    padding: 20px;
-    background: rgba(64, 224, 208, 0.1);
-    border: 1px solid rgba(64, 224, 208, 0.3);
-    border-radius: 12px;
-    position: relative;
-    backdrop-filter: blur(10px);
-}
-
-.saved-focus-text {
-    font-size: 16px;
-    color: #E5E7EB;
-    line-height: 1.5;
-    margin-bottom: 16px;
-    padding-right: 20px;
-    word-wrap: break-word;
-    white-space: pre-wrap;
-}
-
-.delete-focus-btn {
-    background: rgba(239, 68, 68, 0.2);
-    border: 1px solid rgba(239, 68, 68, 0.3);
-    border-radius: 8px;
-    padding: 8px 12px;
-    color: #EF4444;
-    font-size: 12px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    backdrop-filter: blur(10px);
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    position: absolute;
-    top: 16px;
-    right: 16px;
-}
-
-.delete-focus-btn:hover {
-    background: rgba(239, 68, 68, 0.3);
-    border-color: rgba(239, 68, 68, 0.5);
-    transform: translateY(-1px);
-    color: #FCA5A5;
-}
-
-.delete-focus-btn:active {
-    transform: translateY(0);
-}
-
-/* Focus Hint */
-.focus-hint {
-    margin-top: 12px;
-    font-size: 12px;
-    color: #64748B;
-    font-style: italic;
-    text-align: center;
-    padding: 8px;
-    background: rgba(30, 41, 59, 0.3);
-    border-radius: 6px;
-    border: 1px solid rgba(71, 85, 105, 0.2);
-}
-
-/* Update focus input placeholder */
-.focus-input::placeholder {
-    color: #94A3B8;
-    font-style: italic;
-}
-
-/* Responsive adjustments */
-@media (max-width: 768px) {
-    .saved-focus-container {
-        padding: 16px;
+    .tip-item, .destress-item {
+        flex-direction: column;
+        text-align: center;
+        gap: 12px;
     }
     
-    .delete-focus-btn {
-        position: static;
-        margin-top: 12px;
-        width: fit-content;
-        align-self: flex-end;
-    }
-    
-    .saved-focus-text {
-        margin-bottom: 12px;
-        padding-right: 0;
+    .affirmations-grid {
+        gap: 10px;
     }
 }

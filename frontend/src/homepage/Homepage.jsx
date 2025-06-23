@@ -1,53 +1,29 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import Sidebar from '../sidebar/Sidebar';
 import './Homepage.css';
 
 const Homepage = () => {
-    const [focus, setFocus] = useState("");
-    const [savedFocus, setSavedFocus] = useState(""); // Track saved focus
-    const [isFocusSaved, setIsFocusSaved] = useState(false); // Track if focus is saved
-    const [mood, setMood] = useState("");
     const [currentTime, setCurrentTime] = useState(new Date());
     const [greeting, setGreeting] = useState('');
-    const focusInputRef = useRef(null);
-    const [animateSnapshots, setAnimateSnapshots] = useState(false);
+    const [animateElements, setAnimateElements] = useState(false);
 
-    // Sample data - replace with your actual data sources
-    const [homepageData] = useState({
-        user: {
-            name: "Alex",
-            todayDate: "Thursday, April 17th"
-        },
-        todos: {
-            completed: 2,
-            total: 5,
-            nextTask: "Finish lab report",
-            overdueCount: 1
-        },
-        journal: {
-            hasEntryToday: false,
-            prompt: "What am I avoiding and why?",
-            lastEntry: "April 15 - Mental Reset"
-        },
-        pomodoro: {
-            lastSession: "1 hour ago",
-            completedSessions: 3,
-            breakTime: "16 min idle"
-        },
-        recentActivity: [
-            { id: 1, action: "Edited Note", item: "Final Exam Topics.md", icon: "✏️", type: "notes", time: "2 hours ago" },
-            { id: 2, action: "Completed Task", item: "Revise slides", icon: "✅", type: "todo", time: "3 hours ago" },
-            { id: 3, action: "Started Timer", item: "25-min focus session", icon: "🍅", type: "pomodoro", time: "4 hours ago" },
-            { id: 4, action: "Journal Entry", item: "Morning reflection", icon: "📔", type: "journal", time: "1 day ago" },
-            { id: 5, action: "Created Note", item: "Project ideas brainstorm", icon: "📝", type: "notes", time: "1 day ago" }
-        ],
-        quote: "Start where you are. Use what you have. Do what you can."
-    });
+    // Daily rotating quotes
+    const inspirationalQuotes = [
+        "Progress, not perfection, is the goal.",
+        "Small steps every day lead to big changes every year.",
+        "You are stronger than you think and more capable than you imagine.",
+        "Focus on what you can control, let go of what you can't.",
+        "Every moment is a chance to begin again.",
+        "Believe in yourself and all that you are.",
+        "The only impossible journey is the one you never begin."
+    ];
+
+    const todaysQuote = inspirationalQuotes[new Date().getDate() % inspirationalQuotes.length];
 
     useEffect(() => {
         const timeout = setTimeout(() => {
-            setAnimateSnapshots(true);
-        }, 200);
+            setAnimateElements(true);
+        }, 300);
         return () => clearTimeout(timeout);
     }, []);
 
@@ -55,7 +31,6 @@ const Homepage = () => {
         const timer = setInterval(() => {
             setCurrentTime(new Date());
         }, 1000);
-
         return () => clearInterval(timer);
     }, []);
 
@@ -70,22 +45,6 @@ const Homepage = () => {
         }
     }, [currentTime]);
 
-    useEffect(() => {
-        const textarea = document.querySelector('.focus-input');
-        if (textarea) {
-            const handleInput = () => {
-                textarea.style.height = 'auto';
-                textarea.style.height = textarea.scrollHeight + 'px';
-            };
-            textarea.addEventListener('input', handleInput);
-            return () => textarea.removeEventListener('input', handleInput);
-        }
-    }, []);
-
-    const handleMoodChange = (newMood) => {
-        setMood(newMood);
-    };
-
     const formatTime = (date) => {
         return date.toLocaleDateString('en-US', {
             weekday: 'long',
@@ -95,182 +54,151 @@ const Homepage = () => {
         });
     };
 
-    const getMoodIcon = (moodType) => {
-        const moods = {
-            'Happy': '😊',
-            'Neutral': '😐',
-            'Sad': '😔',
-            'Stressed': '😵‍💫'
-        };
-        return moods[moodType] || '😊';
-    };
-
-    const handleFocusKeyPress = (e) => {
-        if (e.key === 'Enter' && !e.shiftKey && focus.trim() !== '') {
-            e.preventDefault();
-            setSavedFocus(focus.trim());
-            setIsFocusSaved(true);
-        }
-    };
-
-    const handleDeleteFocus = () => {
-        setSavedFocus("");
-        setFocus("");
-        setIsFocusSaved(false);
-        // Focus the input after deletion
-        setTimeout(() => {
-            if (focusInputRef.current) {
-                focusInputRef.current.focus();
-            }
-        }, 100);
-    };
-
     return (
         <div className="app-container-homepage">
             <Sidebar />
             <main className="main-content-homepage">
                 {/* Greeting Section */}
-                <section className={`homepage-card greeting-card ${animateSnapshots ? 'snapshot-animated' : ''}`}>
+                <section className={`homepage-card greeting-card ${animateElements ? 'fade-in' : ''}`}>
                     <div className="greeting-content">
-                        <h1 className="greeting-title">🌤️ {greeting}, {homepageData.user.name}!</h1>
+                        <h1 className="greeting-title">🌤️ {greeting}!</h1>
                         <p className="greeting-date">{formatTime(currentTime)}</p>
-                        <blockquote className="daily-quote">"{homepageData.quote}"</blockquote>
+                        <blockquote className="daily-quote">"{todaysQuote}"</blockquote>
                     </div>
                 </section>
 
-                {/* Focus Section */}
-                <div className="section-wrapper">
-                    <p className="section-header">Today's Focus</p>
-                    <section className={`homepage-card focus-card ${animateSnapshots ? 'snapshot-animated' : ''}`}>
-                        <h2 className="card-title">🎯 Main Focus Today</h2>
-                        
-                        {!isFocusSaved ? (
-                            <textarea
-                                ref={focusInputRef}
-                                value={focus}
-                                onChange={(e) => {
-                                    setFocus(e.target.value);
-                                    if (focusInputRef.current) {
-                                        focusInputRef.current.style.height = "auto";
-                                        focusInputRef.current.style.height = focusInputRef.current.scrollHeight + "px";
-                                    }
-                                }}
-                                onKeyPress={handleFocusKeyPress}
-                                placeholder="Write it here to stay mindful... (Press Enter to save)"
-                                rows={1}
-                                className="focus-input"
-                            />
-                        ) : (
-                            <div className="saved-focus-container">
-                                <div className="saved-focus-text">
-                                    {savedFocus}
+                {/* Information Grid */}
+                <div className="info-container">
+                    {/* Productivity Tips */}
+                    <section className={`info-section tips-section ${animateElements ? 'slide-up' : ''}`}>
+                        <h2 className="section-title">💡 Productivity Wisdom</h2>
+                        <div className="tips-list">
+                            <div className="tip-item">
+                                <div className="tip-number">01</div>
+                                <div className="tip-content">
+                                    <h4>The 2-Minute Rule</h4>
+                                    <p>If something takes less than 2 minutes, do it immediately rather than putting it off.</p>
                                 </div>
-                                <button 
-                                    className="delete-focus-btn"
-                                    onClick={handleDeleteFocus}
-                                    title="Delete focus to edit again"
-                                >
-                                    🗑️ Delete
-                                </button>
                             </div>
-                        )}
-                        
-                        {!isFocusSaved && focus.trim() !== '' && (
-                            <div className="focus-hint">
-                                Press Enter to save your focus for today
+                            <div className="tip-item">
+                                <div className="tip-number">02</div>
+                                <div className="tip-content">
+                                    <h4>Time Blocking</h4>
+                                    <p>Schedule specific blocks of time for different types of work to maintain focus.</p>
+                                </div>
                             </div>
-                        )}
-                    </section>
-                </div>
-
-                {/* Snapshot Section */}
-                <div className="section-wrapper">
-                    <p className="section-header">Snapshot</p>
-                    <section className={`homepage-card snapshot-card ${animateSnapshots ? 'snapshot-animated' : ''}`}>
-                        <h2 className="card-title">🧾 Today's Snapshot</h2>
-                        
-                        <div className="snapshot-grid">
-                            <div className="snapshot-block todos-block">
-                                <h3 className="snapshot-title">✅ To-Do</h3>
-                                <ul className="snapshot-list">
-                                    <li className="snapshot-item todo-item">
-                                        Completed {homepageData.todos.completed} out of {homepageData.todos.total} tasks
-                                    </li>
-                                    <li className="snapshot-item todo-item">
-                                        Next Task: "{homepageData.todos.nextTask}"
-                                    </li>
-                                    <li className="snapshot-item todo-item overdue">
-                                        ⚠️ {homepageData.todos.overdueCount} overdue task from yesterday
-                                    </li>
-                                </ul>
-                            </div>
-
-                            <div className="snapshot-block journal-block">
-                                <h3 className="snapshot-title">📓 Journal</h3>
-                                <ul className="snapshot-list">
-                                    <li className="snapshot-item journal-item">
-                                        {homepageData.journal.hasEntryToday ? "Entry completed for today" : "No entry for today"}
-                                    </li>
-                                    <li className="snapshot-item journal-item">
-                                        Prompt: "{homepageData.journal.prompt}"
-                                    </li>
-                                    <li className="snapshot-item journal-item">
-                                        Last Entry: "{homepageData.journal.lastEntry}"
-                                    </li>
-                                </ul>
+                            <div className="tip-item">
+                                <div className="tip-number">03</div>
+                                <div className="tip-content">
+                                    <h4>Single-Tasking</h4>
+                                    <p>Focus on one task at a time to improve both quality and efficiency.</p>
+                                </div>
                             </div>
                         </div>
                     </section>
-                </div>
-                
-                {/* Recent Activity */}
-                <div className="section-wrapper">
-                    <p className="section-header">Activities</p>
-                    <section className={`homepage-card activity-card ${animateSnapshots ? 'snapshot-animated' : ''}`}>
-                        <h2 className="card-title">🗂️ Recent Activity</h2>
-                        <div className="activity-feed">
-                            {homepageData.recentActivity.map((activity, index) => (
-                                <div key={activity.id} className={`activity-feed-item ${activity.type}-activity`}>
-                                    <div className="activity-feed-icon">
-                                        {activity.icon}
+
+                    {/* Ways to Destress */}
+                    <section className={`info-section destress-section ${animateElements ? 'slide-up' : ''}`}>
+                        <h2 className="section-title">🌿 Ways to Destress</h2>
+                        <div className="destress-list">
+                            <div className="destress-item">
+                                <div className="destress-icon">🚶‍♀️</div>
+                                <div className="destress-content">
+                                    <h4>Take a Walk</h4>
+                                    <p>A 10-minute walk in nature can reduce cortisol levels and clear your mind.</p>
+                                </div>
+                            </div>
+                            <div className="destress-item">
+                                <div className="destress-icon">🎵</div>
+                                <div className="destress-content">
+                                    <h4>Listen to Music</h4>
+                                    <p>Slow tempo music can lower heart rate and reduce stress hormones.</p>
+                                </div>
+                            </div>
+                            <div className="destress-item">
+                                <div className="destress-icon">📖</div>
+                                <div className="destress-content">
+                                    <h4>Read Something Light</h4>
+                                    <p>Reading for just 6 minutes can reduce stress levels by up to 68%.</p>
+                                </div>
+                            </div>
+                            <div className="destress-item">
+                                <div className="destress-icon">🧘‍♂️</div>
+                                <div className="destress-content">
+                                    <h4>Practice Deep Breathing</h4>
+                                    <p>5 minutes of focused breathing can activate your body's relaxation response.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    {/* Positivity Boost */}
+                    <section className={`info-section positivity-section ${animateElements ? 'slide-up' : ''}`}>
+                        <h2 className="section-title">☀️ Positivity Boost</h2>
+                        <div className="positivity-content">
+                            <div className="gratitude-reminder">
+                                <div className="gratitude-header">
+                                    <span className="gratitude-icon">🙏</span>
+                                    <h4>Practice Gratitude</h4>
+                                </div>
+                                <p>Think of three things you're grateful for today. Gratitude rewires your brain for happiness.</p>
+                            </div>
+                            <div className="positive-affirmations">
+                                <h4>💫 Daily Affirmations</h4>
+                                <div className="affirmations-grid">
+                                    <div className="affirmation-card">
+                                        <span className="affirmation-text">"I am capable of amazing things"</span>
                                     </div>
-                                    <div className="activity-feed-content">
-                                        <div className="activity-feed-header">
-                                            <span className="activity-feed-action">{activity.action}</span>
-                                            <span className="activity-feed-time">{activity.time}</span>
-                                        </div>
-                                        <div className="activity-feed-item-name">"{activity.item}"</div>
-                                        <div className="activity-feed-type">{activity.type.charAt(0).toUpperCase() + activity.type.slice(1)}</div>
+                                    <div className="affirmation-card">
+                                        <span className="affirmation-text">"Every challenge helps me grow"</span>
+                                    </div>
+                                    <div className="affirmation-card">
+                                        <span className="affirmation-text">"I choose to focus on what I can control"</span>
                                     </div>
                                 </div>
-                            ))}
-                        </div>
-                    </section>
-                </div>
-
-                {/* Mood Check */}
-                <div className="section-wrapper">
-                    <p className="section-header">Mood Check</p>
-                    <section className={`homepage-card mood-card ${animateSnapshots ? 'snapshot-animated' : ''}`}>
-                        <h2 className="card-title">🧠 How are you feeling today?</h2>
-                        <div className="mood-options">
-                            {['Happy', 'Neutral', 'Sad', 'Stressed'].map(moodType => (
-                                <button
-                                    key={moodType}
-                                    className={`mood-btn ${mood.includes(moodType) ? 'selected' : ''}`}
-                                    onClick={() => handleMoodChange(`${getMoodIcon(moodType)} ${moodType}`)}
-                                >
-                                    {getMoodIcon(moodType)} {moodType}
-                                </button>
-                            ))}
-                        </div>
-                        {mood && (
-                            <div className="selected-mood">
-                                <span className="mood-label">You selected:</span>
-                                <strong className="mood-value">{mood}</strong>
                             </div>
-                        )}
+                            <div className="smile-reminder">
+                                <span className="smile-icon">😊</span>
+                                <span className="smile-text">Smiling, even when you don't feel like it, can boost your mood!</span>
+                            </div>
+                        </div>
                     </section>
+
+                    {/* Mindfulness Corner */}
+                    <section className={`info-section mindfulness-section ${animateElements ? 'slide-up' : ''}`}>
+                        <h2 className="section-title">🧘 Mindful Moments</h2>
+                        <div className="mindfulness-content">
+                            <div className="breathing-exercise">
+                                <div className="breathing-circle">
+                                    <div className="circle-inner"></div>
+                                </div>
+                                <div className="breathing-text">
+                                    <h4>4-7-8 Breathing</h4>
+                                    <p>Inhale for 4, hold for 7, exhale for 8. Repeat 3-4 times for instant calm.</p>
+                                </div>
+                            </div>
+                            <div className="mindfulness-tips">
+                                <div className="mindful-tip">
+                                    <span className="tip-emoji">🌅</span>
+                                    <span className="tip-text">Start your day with 5 minutes of silence</span>
+                                </div>
+                                <div className="mindful-tip">
+                                    <span className="tip-emoji">🫖</span>
+                                    <span className="tip-text">Practice mindful eating - savor each bite</span>
+                                </div>
+                                <div className="mindful-tip">
+                                    <span className="tip-emoji">🚶</span>
+                                    <span className="tip-text">Take mindful walks without distractions</span>
+                                </div>
+                            </div>
+                            <div className="mindful-reminder">
+                                <span className="reminder-icon">🌸</span>
+                                <span className="reminder-text">"This moment is all we truly have"</span>
+                            </div>
+                        </div>
+                    </section>
+
+
                 </div>
             </main>
         </div>

@@ -38,5 +38,11 @@ async def register(user: UserCreate, db: Session = Depends(get_db)):
 async def login(data: UserLogin, db: Session = Depends(get_db)):
     user = db.query(User).filter(User.email == data.email).first()
     if user and verify_password(data.password, user.password):
-        return {"status": "success", "message": "Login successful"}
+        return {
+            "status": "success", 
+            "message": "Login successful",
+            "user_id": user.id,       
+            "username": user.username,    
+            "email": user.email       
+        }
     raise HTTPException(status_code=401, detail="Invalid credentials")

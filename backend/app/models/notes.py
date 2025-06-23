@@ -13,7 +13,7 @@ class Note(Base):
     title = Column(String, nullable=False, default="Untitled Note")
     content = Column(Text, nullable=False, default="")
     preview = Column(String, nullable=True)
-    created_at = Column(DateTime, default=datetime.utcnow)
+    created_at = Column(DateTime, default=get_local_time)
     last_modified = Column(DateTime, default=get_local_time, onupdate=get_local_time)
     user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
     
