@@ -8,8 +8,10 @@ class User(Base):
     email = Column(String, unique=True, index=True)
     username = Column(String, nullable=False)
     password = Column(String)
+    security_key = Column(String, nullable=False)  # Added security key field
 
-    notes = relationship("Note", back_populates="user")
-    todos = relationship("Todo", back_populates="user")
-    journals = relationship("Journal", back_populates="user")
-    pomodoro_sessions = relationship("PomodoroSession", back_populates="user")
+    # Updated relationships with cascade delete
+    notes = relationship("Note", back_populates="user", cascade="all, delete-orphan")
+    todos = relationship("Todo", back_populates="user", cascade="all, delete-orphan")
+    journals = relationship("Journal", back_populates="user", cascade="all, delete-orphan")
+    pomodoro_sessions = relationship("PomodoroSession", back_populates="user", cascade="all, delete-orphan")

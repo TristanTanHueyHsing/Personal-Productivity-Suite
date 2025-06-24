@@ -271,7 +271,7 @@ const Profile = () => {
             showAlert('Profile Deleted!', 'Your profile has been deleted successfully!', 'success');
             // Redirect to login or home page after a short delay
             setTimeout(() => {
-                window.location.href = '/login';
+                window.location.href = '/';
             }, 2000);
         } catch (err) {
             setError(err.message);

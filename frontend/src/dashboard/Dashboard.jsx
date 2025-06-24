@@ -113,7 +113,7 @@ const calculateMonthlyTrends = (journals, notes, todos, pomodoroSessions) => {
     return trends;
 };
 
-// Performance Goals Calculation
+// Performance Goals Calculation (Monthly goals only - streak separated)
 const calculatePerformanceGoals = (journals, notes, todos, pomodoroSessions, customGoals = null) => {
     const now = new Date();
     const currentMonth = now.getMonth();
@@ -143,21 +143,17 @@ const calculatePerformanceGoals = (journals, notes, todos, pomodoroSessions, cus
         return date >= monthStart && date <= monthEnd;
     }).reduce((sum, session) => sum + session.focus_sessions_completed, 0);
 
-    // Current streak
-    const currentStreak = calculateSimpleStreak(journals, notes, todos, pomodoroSessions);
-
     // Use custom goals if provided, otherwise use defaults
     const defaultGoals = {
         journals: 20,
         todos: 50,
         notes: 30,
-        focus: 100,  // Focus sessions target
-        streak: 14
+        focus: 100
     };
 
     const goalTargets = customGoals || defaultGoals;
 
-    // Monthly goals
+    // Monthly goals only (no streak)
     const goals = [
         {
             id: 'journals',
@@ -190,14 +186,6 @@ const calculatePerformanceGoals = (journals, notes, todos, pomodoroSessions, cus
             current: currentMonthFocus,
             type: 'focus',
             icon: '🎯'
-        },
-        {
-            id: 'streak',
-            name: 'Activity Streak',
-            target: goalTargets.streak,
-            current: currentStreak,
-            type: 'streak',
-            icon: '🔥'
         }
     ];
 
@@ -218,6 +206,31 @@ const calculatePerformanceGoals = (journals, notes, todos, pomodoroSessions, cus
             status
         };
     });
+};
+
+// Separate streak goal calculation
+const calculateStreakGoal = (journals, notes, todos, pomodoroSessions, streakTarget = 14) => {
+    const currentStreak = calculateSimpleStreak(journals, notes, todos, pomodoroSessions);
+
+    const progress = Math.min((currentStreak / streakTarget) * 100, 100);
+    let status = 'on-track';
+
+    if (progress >= 100) {
+        status = 'completed';
+    } else if (progress < 50) {
+        status = 'behind';
+    }
+
+    return {
+        id: 'streak',
+        name: 'Activity Streak',
+        target: streakTarget,
+        current: currentStreak,
+        type: 'streak',
+        icon: '🔥',
+        progress: Math.round(progress),
+        status
+    };
 };
 
 const calculateActiveDaysForPeriod = (journals, notes, todos, pomodoroSessions, startDate, endDate) => {
@@ -349,7 +362,7 @@ const calculatePerformanceMetrics = (journals, notes, todos, pomodoroSessions) =
 };
 
 // Calculate dashboard statistics from raw data
-const calculateDashboardStats = (journals, notes, todos, pomodoroSessions, customGoals = null) => {
+const calculateDashboardStats = (journals, notes, todos, pomodoroSessions, customGoals = null, streakTarget = 14) => {
     const now = new Date();
     const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
     const todayString = today.toDateString();
@@ -384,8 +397,9 @@ const calculateDashboardStats = (journals, notes, todos, pomodoroSessions, custo
     // 12-month trends
     const productivityTrends = calculateMonthlyTrends(journals, notes, todos, pomodoroSessions);
 
-    // Performance goals and metrics
+    // Performance goals and metrics (separate monthly goals from streak)
     const performanceGoals = calculatePerformanceGoals(journals, notes, todos, pomodoroSessions, customGoals);
+    const streakGoal = calculateStreakGoal(journals, notes, todos, pomodoroSessions, streakTarget);
     const performanceMetrics = calculatePerformanceMetrics(journals, notes, todos, pomodoroSessions);
 
     return {
@@ -410,6 +424,7 @@ const calculateDashboardStats = (journals, notes, todos, pomodoroSessions, custo
             averageScore: 78
         },
         performanceGoals: performanceGoals,
+        streakGoal: streakGoal,
         performanceMetrics: performanceMetrics
     };
 };
@@ -421,20 +436,21 @@ const Dashboard = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [showGoalModal, setShowGoalModal] = useState(false);
+    const [showStreakModal, setShowStreakModal] = useState(false);
     const [goalTargets, setGoalTargets] = useState({
         journals: 20,
         todos: 50,
         notes: 30,
-        focus: 100,
-        streak: 14
+        focus: 100
     });
+    const [streakTarget, setStreakTarget] = useState(14);
     const [tempGoalTargets, setTempGoalTargets] = useState({
         journals: 20,
         todos: 50,
         notes: 30,
-        focus: 100,
-        streak: 14
+        focus: 100
     });
+    const [tempStreakTarget, setTempStreakTarget] = useState(14);
 
     const userId = getUserId();
 
@@ -460,8 +476,8 @@ const Dashboard = () => {
             const todos = await todosRes.json();
             const pomodoroSessions = await pomodoroRes.json();
 
-            // Calculate dashboard stats with current goal targets
-            const dashboardStats = calculateDashboardStats(journals, notes, todos, pomodoroSessions, goalTargets);
+            // Calculate dashboard stats with current goal targets and streak target
+            const dashboardStats = calculateDashboardStats(journals, notes, todos, pomodoroSessions, goalTargets, streakTarget);
             setDashboardData(dashboardStats);
             setError(null);
         } catch (err) {
@@ -470,7 +486,7 @@ const Dashboard = () => {
         } finally {
             setLoading(false);
         }
-    }, [userId, goalTargets]);
+    }, [userId, goalTargets, streakTarget]);
 
     useEffect(() => {
         fetchDashboardData();
@@ -560,6 +576,25 @@ const Dashboard = () => {
         setShowGoalModal(true);
     };
 
+    const handleResetStreakGoal = () => {
+        // Suggest next milestone based on current target
+        const currentStreak = dashboardData.streakGoal.current;
+        let suggestedTarget = streakTarget;
+
+        if (currentStreak >= streakTarget) {
+            if (streakTarget < 7) suggestedTarget = 7;
+            else if (streakTarget < 14) suggestedTarget = 14;
+            else if (streakTarget < 21) suggestedTarget = 21;
+            else if (streakTarget < 30) suggestedTarget = 30;
+            else if (streakTarget < 60) suggestedTarget = 60;
+            else if (streakTarget < 100) suggestedTarget = 100;
+            else suggestedTarget = streakTarget + 30;
+        }
+
+        setTempStreakTarget(suggestedTarget);
+        setShowStreakModal(true);
+    };
+
     const handleSaveGoals = async () => {
         try {
             // You can add API call here to save goals to backend
@@ -575,9 +610,26 @@ const Dashboard = () => {
         }
     };
 
+    const handleSaveStreakGoal = async () => {
+        try {
+            setStreakTarget(tempStreakTarget);
+            setShowStreakModal(false);
+
+            // Refresh dashboard data with new streak target
+            await fetchDashboardData();
+        } catch (err) {
+            console.error('Error saving streak goal:', err);
+        }
+    };
+
     const handleCancelGoals = () => {
         setTempGoalTargets({ ...goalTargets });
         setShowGoalModal(false);
+    };
+
+    const handleCancelStreakGoal = () => {
+        setTempStreakTarget(streakTarget);
+        setShowStreakModal(false);
     };
 
     // Loading state
@@ -948,88 +1000,141 @@ const Dashboard = () => {
                         </div>
 
                         <div className="performance-overview">
-                            {/* Goals Section */}
-                            <div className="performance-section">
-                                <div className="section-header">
-                                    <h4 className="section-title">Monthly Goals</h4>
-                                    <div className="section-badge">Progress Tracking</div>
+                            {/* Top Row: Monthly Goals and Performance Metrics side by side */}
+                            <div className="goals-and-metrics-row">
+                                {/* Monthly Goals Section */}
+                                <div className="performance-section">
+                                    <div className="section-header">
+                                        <h4 className="section-title">Monthly Goals</h4>
+                                        <div className="section-badge">Monthly Progress</div>
+                                    </div>
+
+                                    <div className="goals-grid">
+                                        {dashboardData.performanceGoals.map((goal) => (
+                                            <div key={goal.id} className="goal-item">
+                                                <div className="goal-header">
+                                                    <h5 className="goal-name">
+                                                        {goal.icon} {goal.name}
+                                                    </h5>
+                                                    <div className={`goal-status ${getStatusClass(goal.status)}`}>
+                                                        {getStatusText(goal.status)}
+                                                    </div>
+                                                </div>
+
+                                                <div className="goal-progress">
+                                                    <div className="progress-header">
+                                                        <span className="progress-text">Progress</span>
+                                                        <span className="progress-percentage">{goal.progress}%</span>
+                                                    </div>
+                                                    <div className="progress-bar">
+                                                        <div
+                                                            className={`progress-fill ${getProgressFillClass(goal.type)}`}
+                                                            style={{ width: `${goal.progress}%` }}
+                                                        ></div>
+                                                    </div>
+                                                </div>
+
+                                                <div className="goal-stats">
+                                                    <span className="current-value">{goal.current}</span>
+                                                    <span className="target-value">/ {goal.target} target</span>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
                                 </div>
 
-                                <div className="goals-grid">
-                                    {dashboardData.performanceGoals.map((goal) => (
-                                        <div key={goal.id} className="goal-item">
-                                            <div className="goal-header">
-                                                <h5 className="goal-name">
-                                                    {goal.icon} {goal.name}
-                                                </h5>
-                                                <div className={`goal-status ${getStatusClass(goal.status)}`}>
-                                                    {getStatusText(goal.status)}
-                                                </div>
-                                            </div>
+                                {/* Performance Metrics */}
+                                <div className="performance-section">
+                                    <div className="section-header">
+                                        <h4 className="section-title">Performance Metrics</h4>
+                                        <div className="section-badge">Analytics</div>
+                                    </div>
 
-                                            <div className="goal-progress">
-                                                <div className="progress-header">
-                                                    <span className="progress-text">Progress</span>
-                                                    <span className="progress-percentage">{goal.progress}%</span>
-                                                </div>
-                                                <div className="progress-bar">
-                                                    <div
-                                                        className={`progress-fill ${getProgressFillClass(goal.type)}`}
-                                                        style={{ width: `${goal.progress}%` }}
-                                                    ></div>
-                                                </div>
-                                            </div>
-
-                                            <div className="goal-stats">
-                                                <span className="current-value">{goal.current}</span>
-                                                <span className="target-value">/ {goal.target} target</span>
+                                    <div className="performance-metrics">
+                                        <div className="metric-card">
+                                            <span className="metric-icon">📊</span>
+                                            <div className="metric-value">{dashboardData.performanceMetrics.totalActivities}</div>
+                                            <div className="metric-label">Total Activities</div>
+                                            <div className={`metric-trend ${getTrendClass(dashboardData.performanceMetrics.monthlyGrowth)}`}>
+                                                {getTrendText(dashboardData.performanceMetrics.monthlyGrowth)}
                                             </div>
                                         </div>
-                                    ))}
+
+                                        <div className="metric-card">
+                                            <span className="metric-icon">✅</span>
+                                            <div className="metric-value">{dashboardData.performanceMetrics.completionRate}%</div>
+                                            <div className="metric-label">Completion Rate</div>
+                                            <div className={`metric-trend ${getTrendClass(dashboardData.performanceMetrics.completionRateChange)}`}>
+                                                {getTrendText(dashboardData.performanceMetrics.completionRateChange)}
+                                            </div>
+                                        </div>
+
+                                        <div className="metric-card">
+                                            <span className="metric-icon">📈</span>
+                                            <div className="metric-value">{dashboardData.performanceMetrics.weeklyAverage}</div>
+                                            <div className="metric-label">Weekly Average</div>
+                                            <div className={`metric-trend ${getTrendClass(dashboardData.performanceMetrics.weeklyAverageChange)}`}>
+                                                {getTrendText(dashboardData.performanceMetrics.weeklyAverageChange)}
+                                            </div>
+                                        </div>
+
+                                        <div className="metric-card">
+                                            <span className="metric-icon">🎯</span>
+                                            <div className="metric-value">{dashboardData.performanceMetrics.totalFocusTime}</div>
+                                            <div className="metric-label">Focus Hours</div>
+                                            <div className={`metric-trend ${getTrendClass(dashboardData.performanceMetrics.focusTimeChange)}`}>
+                                                {getTrendText(dashboardData.performanceMetrics.focusTimeChange)}
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
 
-                            {/* Performance Metrics */}
-                            <div className="performance-section">
+                            {/* Bottom Row: Activity Streak Goal (full width) */}
+                            <div className="performance-section streak-section">
                                 <div className="section-header">
-                                    <h4 className="section-title">Performance Metrics</h4>
-                                    <div className="section-badge">Analytics</div>
+                                    <h4 className="section-title">Activity Streak Goal</h4>
+                                    <div className="section-badge">Ongoing Challenge</div>
                                 </div>
 
-                                <div className="performance-metrics">
-                                    <div className="metric-card">
-                                        <span className="metric-icon">📊</span>
-                                        <div className="metric-value">{dashboardData.performanceMetrics.totalActivities}</div>
-                                        <div className="metric-label">Total Activities</div>
-                                        <div className={`metric-trend ${getTrendClass(dashboardData.performanceMetrics.monthlyGrowth)}`}>
-                                            {getTrendText(dashboardData.performanceMetrics.monthlyGrowth)}
+                                <div className="streak-goal-container">
+                                    <div className="streak-goal-item">
+                                        <div className="goal-header">
+                                            <h5 className="goal-name">
+                                                {dashboardData.streakGoal.icon} {dashboardData.streakGoal.name}
+                                            </h5>
+                                            <div className="goal-header-right">
+                                                <div className={`goal-status ${getStatusClass(dashboardData.streakGoal.status)}`}>
+                                                    {getStatusText(dashboardData.streakGoal.status)}
+                                                </div>
+                                                {dashboardData.streakGoal.status === 'completed' && (
+                                                    <button
+                                                        className="reset-goal-btn"
+                                                        onClick={handleResetStreakGoal}
+                                                        title="Set new streak target"
+                                                    >
+                                                        🎯
+                                                    </button>
+                                                )}
+                                            </div>
                                         </div>
-                                    </div>
 
-                                    <div className="metric-card">
-                                        <span className="metric-icon">✅</span>
-                                        <div className="metric-value">{dashboardData.performanceMetrics.completionRate}%</div>
-                                        <div className="metric-label">Completion Rate</div>
-                                        <div className={`metric-trend ${getTrendClass(dashboardData.performanceMetrics.completionRateChange)}`}>
-                                            {getTrendText(dashboardData.performanceMetrics.completionRateChange)}
+                                        <div className="goal-progress">
+                                            <div className="progress-header">
+                                                <span className="progress-text">Progress</span>
+                                                <span className="progress-percentage">{dashboardData.streakGoal.progress}%</span>
+                                            </div>
+                                            <div className="progress-bar">
+                                                <div
+                                                    className={`progress-fill ${getProgressFillClass(dashboardData.streakGoal.type)}`}
+                                                    style={{ width: `${dashboardData.streakGoal.progress}%` }}
+                                                ></div>
+                                            </div>
                                         </div>
-                                    </div>
 
-                                    <div className="metric-card">
-                                        <span className="metric-icon">📈</span>
-                                        <div className="metric-value">{dashboardData.performanceMetrics.weeklyAverage}</div>
-                                        <div className="metric-label">Weekly Average</div>
-                                        <div className={`metric-trend ${getTrendClass(dashboardData.performanceMetrics.weeklyAverageChange)}`}>
-                                            {getTrendText(dashboardData.performanceMetrics.weeklyAverageChange)}
-                                        </div>
-                                    </div>
-
-                                    <div className="metric-card">
-                                        <span className="metric-icon">🎯</span>
-                                        <div className="metric-value">{dashboardData.performanceMetrics.totalFocusTime}</div>
-                                        <div className="metric-label">Focus Hours</div>
-                                        <div className={`metric-trend ${getTrendClass(dashboardData.performanceMetrics.focusTimeChange)}`}>
-                                            {getTrendText(dashboardData.performanceMetrics.focusTimeChange)}
+                                        <div className="goal-stats">
+                                            <span className="current-value">{dashboardData.streakGoal.current}</span>
+                                            <span className="target-value">/ {dashboardData.streakGoal.target} days target</span>
                                         </div>
                                     </div>
                                 </div>
@@ -1039,17 +1144,20 @@ const Dashboard = () => {
                         {/* Goal Setting Actions */}
                         <div className="goal-actions">
                             <button className="action-button primary" onClick={handleSetNewGoals}>
-                                🎯 Set New Goals
+                                📊 Set Monthly Goals
+                            </button>
+                            <button className="action-button secondary" onClick={handleResetStreakGoal}>
+                                🔥 Set Streak Goal
                             </button>
                         </div>
                     </div>
                 </div>
 
-                {/* Goal Setting Modal */}
+                {/* Monthly Goal Setting Modal */}
                 {showGoalModal && (
                     <div className="modal-overlay">
                         <div className="modal-content">
-                            <h3>🎯 Set New Monthly Goals</h3>
+                            <h3>📊 Set New Monthly Goals</h3>
 
                             <div className="form-grid">
                                 <div className="form-group">
@@ -1107,20 +1215,6 @@ const Dashboard = () => {
                                         max="300"
                                     />
                                 </div>
-
-                                <div className="form-group">
-                                    <label>🔥 Activity Streak Target (Days)</label>
-                                    <input
-                                        type="number"
-                                        value={tempGoalTargets.streak}
-                                        onChange={(e) => setTempGoalTargets(prev => ({
-                                            ...prev,
-                                            streak: parseInt(e.target.value) || 0
-                                        }))}
-                                        min="1"
-                                        max="365"
-                                    />
-                                </div>
                             </div>
 
                             <div className="button-group">
@@ -1135,6 +1229,49 @@ const Dashboard = () => {
                                     className="action-button primary"
                                 >
                                     Save Goals
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                )}
+
+                {/* Streak Goal Setting Modal */}
+                {showStreakModal && (
+                    <div className="modal-overlay">
+                        <div className="modal-content">
+                            <h3>🔥 Set New Activity Streak Goal</h3>
+                            <p className="modal-description">
+                                Set your target for consecutive days of activity. Current streak: {dashboardData.streakGoal.current} days
+                            </p>
+
+                            <div className="form-grid">
+                                <div className="form-group">
+                                    <label>🔥 Activity Streak Target (Days)</label>
+                                    <input
+                                        type="number"
+                                        value={tempStreakTarget}
+                                        onChange={(e) => setTempStreakTarget(parseInt(e.target.value) || 0)}
+                                        min="1"
+                                        max="365"
+                                    />
+                                    <small className="input-hint">
+                                        Suggested milestones: 7, 14, 21, 30, 60, 100 days
+                                    </small>
+                                </div>
+                            </div>
+
+                            <div className="button-group">
+                                <button
+                                    onClick={handleCancelStreakGoal}
+                                    className="action-button"
+                                >
+                                    Cancel
+                                </button>
+                                <button
+                                    onClick={handleSaveStreakGoal}
+                                    className="action-button primary"
+                                >
+                                    Save Streak Goal
                                 </button>
                             </div>
                         </div>

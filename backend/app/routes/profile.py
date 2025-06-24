@@ -2,6 +2,10 @@ from fastapi import APIRouter, HTTPException, Depends
 from sqlalchemy.orm import Session
 from app.schemas.profile import ProfileUpdate, PasswordChange, ProfileResponse
 from app.models.user import User
+from app.models.notes import Note
+from app.models.todo import Todo
+from app.models.journal import Journal
+from app.models.pomodoro import PomodoroSession
 from app.database.connection import SessionLocal
 from app.core.security import hash_password, verify_password, is_strong_password
 import sqlalchemy.exc
@@ -88,17 +92,46 @@ async def change_password(user_id: int, password_data: PasswordChange, db: Sessi
 
 @router.delete("/profile/{user_id}")
 async def delete_profile(user_id: int, db: Session = Depends(get_db)):
+    """
+    Delete user profile and ALL associated data
+    """
     user = db.query(User).filter(User.id == user_id).first()
     
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
     
     try:
-        # Delete user and all related data (cascade should handle this)
+        # Count data before deletion for logging
+        notes_count = db.query(Note).filter(Note.user_id == user_id).count()
+        todos_count = db.query(Todo).filter(Todo.user_id == user_id).count()
+        journals_count = db.query(Journal).filter(Journal.user_id == user_id).count()
+        pomodoro_count = db.query(PomodoroSession).filter(PomodoroSession.user_id == user_id).count()
+        
+        print(f"[ACCOUNT DELETION] User {user_id} ({user.email}):")
+        print(f"  - Notes: {notes_count}")
+        print(f"  - Todos: {todos_count}")
+        print(f"  - Journals: {journals_count}")
+        print(f"  - Pomodoro Sessions: {pomodoro_count}")
+        
+        # Delete user - this will cascade delete all related data
+        # due to the cascade="all, delete-orphan" in relationships
         db.delete(user)
         db.commit()
+        
+        print(f"[ACCOUNT DELETION COMPLETE] User {user_id} and all associated data deleted")
+        
     except Exception as e:
         db.rollback()
+        print(f"[ACCOUNT DELETION FAILED] User {user_id}: {str(e)}")
         raise HTTPException(status_code=500, detail="Failed to delete profile")
     
-    return {"status": "success", "message": "Profile deleted successfully"}
+    return {
+        "status": "success", 
+        "message": "Profile and all associated data deleted successfully",
+        "deleted_data": {
+            "notes": notes_count,
+            "todos": todos_count,
+            "journals": journals_count,
+            "pomodoro_sessions": pomodoro_count
+        }
+    }

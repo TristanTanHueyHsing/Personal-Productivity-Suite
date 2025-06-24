@@ -16,7 +16,7 @@ const Login = () => {
     const [isResettingPassword, setIsResettingPassword] = useState(false);
     const [successMessage, setSuccessMessage] = useState("");
     const [showSuccessAnimation, setShowSuccessAnimation] = useState(false);
-    
+
     // Security key popup states
     const [showSecurityKeyPopup, setShowSecurityKeyPopup] = useState(false);
     const [generatedSecurityKey, setGeneratedSecurityKey] = useState("");
@@ -31,7 +31,7 @@ const Login = () => {
         console.log('showSuccess called with message:', message);
         setSuccessMessage(message);
         setShowSuccessAnimation(true);
-        
+
         setTimeout(() => {
             setSuccessMessage('');
             setShowSuccessAnimation(false);
@@ -62,6 +62,15 @@ const Login = () => {
             result += chars.charAt(Math.floor(Math.random() * chars.length));
         }
         return result;
+    };
+
+    // Copy security key to clipboard
+    const copySecurityKey = () => {
+        navigator.clipboard.writeText(generatedSecurityKey).then(() => {
+            showSuccess('Security key copied to clipboard!');
+        }).catch(() => {
+            showError('Failed to copy to clipboard. Please copy manually.');
+        });
     };
 
     const validatePassword = (password) => {
@@ -114,6 +123,7 @@ const Login = () => {
             return; // Stop here and wait for user confirmation
         }
 
+        // Login logic
         const url = "http://localhost:8000/login";
 
         try {
@@ -138,18 +148,18 @@ const Login = () => {
             if (response.ok) {
                 console.log('Success condition met!');
                 console.log('Calling showSuccess for login');
-                
+
                 // STORE USER DATA IN LOCALSTORAGE
                 localStorage.setItem('user_id', data.user_id.toString());
                 localStorage.setItem('username', data.username);
                 localStorage.setItem('email', data.email);
-                
+
                 console.log('Stored user data:', {
                     user_id: data.user_id,
                     username: data.username,
                     email: data.email
                 });
-                
+
                 showSuccess("Login successful! Redirecting...");
                 setTimeout(() => {
                     navigate('/homepage');
@@ -183,24 +193,36 @@ const Login = () => {
                 }),
             });
 
-            console.log('Registration response status:', response.status);
             const data = await response.json();
-            console.log('Registration response data:', data);
 
             if (response.ok) {
-                console.log('Registration successful!');
+                // Success - normal registration
                 setShowSecurityKeyPopup(false);
-                showSuccess("Account created successfully! You can now log in with your new credentials.");
-                
+                showSuccess("Account created successfully! Your security key has been saved.");
+
                 setTimeout(() => {
                     setIsRegistering(false);
                     clearForm();
                 }, 2000);
+
+            } else if (response.status === 409) {
+                // Security key collision detected!
+                console.log('Security key collision detected, generating new key...');
+
+                // Generate a new security key automatically
+                const newSecurityKey = generateSecurityKey();
+                setGeneratedSecurityKey(newSecurityKey);
+
+                showError('Security key collision detected. A new key has been generated.');
+
+                // Don't close the popup - let user see the new key
+
             } else {
-                console.log('Registration failed, showing error');
+                // Other errors
                 setShowSecurityKeyPopup(false);
                 showError(data.detail || "Registration failed");
             }
+
         } catch (err) {
             console.error('Registration error:', err);
             setShowSecurityKeyPopup(false);
@@ -248,7 +270,7 @@ const Login = () => {
                 console.log('Password reset success condition met!');
                 console.log('Calling showSuccess for password reset');
                 showSuccess("Password reset successfully! You can now log in with your new password.");
-                
+
                 setTimeout(() => {
                     setIsResettingPassword(false);
                     clearForm();
@@ -277,14 +299,6 @@ const Login = () => {
         }
     };
 
-    const copySecurityKey = () => {
-        navigator.clipboard.writeText(generatedSecurityKey).then(() => {
-            showSuccess('Security key copied to clipboard!');
-        }).catch(() => {
-            showError('Failed to copy to clipboard. Please copy manually.');
-        });
-    };
-
     useEffect(() => {
         const handleKeyDown = (e) => {
             if (e.key === 'Enter' && !showSecurityKeyPopup) {
@@ -308,9 +322,9 @@ const Login = () => {
                 </p>
                 <div className="security-key-display">
                     <code>{generatedSecurityKey}</code>
-                    <button 
-                        type="button" 
-                        className="copy-button" 
+                    <button
+                        type="button"
+                        className="copy-button"
                         onClick={copySecurityKey}
                         title="Copy to clipboard"
                     >
@@ -318,14 +332,14 @@ const Login = () => {
                     </button>
                 </div>
                 <p className="security-key-instructions">
-                    <strong>Save this key in a secure location immediately!</strong><br/>
+                    <strong>Save this key in a secure location immediately!</strong><br />
                     This key will NOT be shown again after account creation.
                 </p>
-                
+
                 <div className="security-key-confirmation">
                     <label className="checkbox-container">
-                        <input 
-                            type="checkbox" 
+                        <input
+                            type="checkbox"
                             checked={securityKeyConfirmed}
                             onChange={(e) => setSecurityKeyConfirmed(e.target.checked)}
                         />
@@ -335,17 +349,17 @@ const Login = () => {
                 </div>
 
                 <div className="security-key-actions">
-                    <button 
+                    <button
                         type="button"
-                        className="confirm-button" 
+                        className="confirm-button"
                         onClick={handleSecurityKeyConfirmation}
                         disabled={!securityKeyConfirmed}
                     >
                         Complete Registration
                     </button>
-                    <button 
+                    <button
                         type="button"
-                        className="cancel-button" 
+                        className="cancel-button"
                         onClick={() => setShowSecurityKeyPopup(false)}
                     >
                         Cancel

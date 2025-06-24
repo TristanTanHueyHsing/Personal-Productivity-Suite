@@ -601,11 +601,20 @@
     font-weight: 500;
 }
 
+/* Updated: Grid layout for top row (Monthly Goals + Performance Metrics) */
 .performance-overview {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    display: flex;
+    flex-direction: column;
     gap: 32px;
     margin-bottom: 40px;
+}
+
+/* New: Top row with Monthly Goals and Performance Metrics side by side */
+.goals-and-metrics-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+    align-items: start;
 }
 
 .performance-section {
@@ -614,6 +623,13 @@
     padding: 32px;
     border: 1px solid rgba(71, 85, 105, 0.4);
     backdrop-filter: blur(10px);
+}
+
+/* Specific styling for streak section when full width below */
+.performance-section.streak-section {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
 }
 
 .section-header {
@@ -642,7 +658,7 @@
     border: 1px solid rgba(64, 224, 208, 0.2);
 }
 
-/* Goals Grid */
+/* Goals Grid - remains the same */
 .goals-grid {
     display: grid;
     gap: 20px;
@@ -796,12 +812,76 @@
     font-weight: 500;
 }
 
-/* Performance Metrics */
+/* Updated: Streak goal container for full width layout */
+.streak-goal-container {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+}
+
+.streak-goal-item {
+    background: rgba(15, 23, 42, 0.6);
+    border-radius: 16px;
+    padding: 24px;
+    border: 1px solid rgba(71, 85, 105, 0.3);
+    transition: all 0.3s ease;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.streak-goal-item:hover {
+    transform: translateY(-2px);
+    background: rgba(15, 23, 42, 0.8);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+/* Goal header layout for reset button */
+.goal-header-right {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* Reset goal button styling */
+.reset-goal-btn {
+    background: rgba(64, 224, 208, 0.1);
+    border: 1px solid rgba(64, 224, 208, 0.3);
+    border-radius: 6px;
+    padding: 4px 8px;
+    font-size: 12px;
+    color: #40E0D0;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    min-width: 32px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.reset-goal-btn:hover {
+    background: rgba(64, 224, 208, 0.2);
+    border-color: rgba(64, 224, 208, 0.5);
+    transform: translateY(-1px);
+}
+
+/* Performance Metrics Section */
+.performance-metrics-section {
+    background: rgba(30, 41, 59, 0.6);
+    border-radius: 20px;
+    padding: 32px;
+    border: 1px solid rgba(71, 85, 105, 0.4);
+    backdrop-filter: blur(10px);
+}
+
+/* Performance Metrics - updated for side-by-side layout */
 .performance-metrics {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    grid-template-columns: repeat(2, 1fr);
     gap: 20px;
-    margin-bottom: 32px;
+    margin-bottom: 0;
 }
 
 .metric-card {
@@ -875,6 +955,7 @@
     margin-top: 32px;
     padding-top: 24px;
     border-top: 1px solid rgba(71, 85, 105, 0.3);
+    flex-wrap: wrap;
 }
 
 .action-button {
@@ -905,6 +986,18 @@
 .action-button.primary:hover {
     background: #36D3BC;
     box-shadow: 0 8px 32px rgba(64, 224, 208, 0.4);
+}
+
+.action-button.secondary {
+    background: rgba(92, 126, 173, 0.516);
+    border: 1px solid rgba(71, 85, 105, 0.3);
+    color: #FFFFFF;
+}
+
+.action-button.secondary:hover {
+    background: rgba(71, 85, 105, 0.2);
+    border-color: rgba(71, 85, 105, 0.5);
+    transform: translateY(-1px);
 }
 
 /* Modal Styles */
@@ -1052,7 +1145,36 @@
     flex-direction: column;
 }
 
-/* Responsive Design */
+/* Modal description text */
+.modal-description {
+    color: rgba(71, 85, 105, 0.8);
+    margin-bottom: 20px;
+    font-size: 14px;
+    line-height: 1.5;
+    text-align: center;
+}
+
+/* Input hint text */
+.input-hint {
+    color: rgba(71, 85, 105, 0.6);
+    font-size: 12px;
+    margin-top: 4px;
+    display: block;
+    font-style: italic;
+}
+
+/* Responsive Design Updates */
+@media (max-width: 1200px) {
+    .goals-and-metrics-row {
+        grid-template-columns: 1fr;
+        gap: 24px;
+    }
+    
+    .performance-metrics {
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    }
+}
+
 @media (max-width: 768px) {
     .app-container-dashboard {
         margin-left: 0;
@@ -1100,6 +1222,25 @@
         padding: 24px;
     }
     
+    .goals-and-metrics-row {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    
+    .performance-overview {
+        gap: 24px;
+    }
+    
+    .performance-section,
+    .performance-metrics-section {
+        padding: 24px;
+    }
+    
+    .performance-metrics {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+    }
+    
     .today-stats {
         grid-template-columns: 1fr;
     }
@@ -1135,41 +1276,22 @@
         font-size: 24px;
     }
     
-    .performance-overview {
-        grid-template-columns: 1fr;
-        gap: 24px;
+    .goal-header-right {
+        flex-direction: column;
+        gap: 4px;
+        align-items: flex-end;
     }
     
-    .performance-section {
-        padding: 24px;
-    }
-    
-    .performance-metrics {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 16px;
-    }
-    
-    .metric-card {
-        padding: 16px;
-    }
-    
-    .metric-value {
-        font-size: 24px;
-    }
-    
-    .metric-icon {
-        font-size: 28px;
-        margin-bottom: 8px;
+    .reset-goal-btn {
+        font-size: 10px;
+        padding: 2px 6px;
+        min-width: 28px;
+        height: 24px;
     }
     
     .goal-actions {
         flex-direction: column;
         gap: 8px;
-    }
-    
-    .action-button {
-        padding: 10px 20px;
-        font-size: 13px;
     }
     
     .section-header {
@@ -1269,6 +1391,11 @@
         padding: 20px;
     }
     
+    .performance-section,
+    .performance-metrics-section {
+        padding: 20px;
+    }
+    
     .card-title {
         font-size: 16px;
     }
@@ -1290,7 +1417,8 @@
         font-size: 18px;
     }
     
-    .goal-item {
+    .goal-item,
+    .streak-goal-item {
         padding: 20px;
     }
     
