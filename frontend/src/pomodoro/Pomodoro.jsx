@@ -6,9 +6,9 @@ import { getUserId } from '../utils/userUtils';
 
 const Pomodoro = () => {
     // Durations in seconds for test mode
-    const FOCUS_TIME = 1;//1500
-    const SHORT_BREAK_TIME = 1;//300
-    const LONG_BREAK_TIME = 1;//900
+    const FOCUS_TIME = 1500;//1500
+    const SHORT_BREAK_TIME = 300;//300
+    const LONG_BREAK_TIME = 900;//900
 
     // State
     const [timeLeft, setTimeLeft] = useState(FOCUS_TIME);
